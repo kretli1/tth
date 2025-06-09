@@ -1,9 +1,9 @@
-const LOGIN_WEBHOOK_URL = 'https://n8n-2025n8n.wjemh8.easypanel.host/webhook/0bbfaeaa-d9cb-4a4d-960c-cfedf598e547';
-const SEARCH_WEBHOOK_URL = 'https://n8n-2025n8n.wjemh8.easypanel.host/webhook/b024bddc-64a5-4561-b0b2-4aba543cf499';
-const RECOVERY_WEBHOOK_URL = 'https://n8n-2025n8n.wjemh8.easypanel.host/webhook/password-recovery';
+const LOGIN_WEBHOOK_URL   = 'https://n8n-2025n8n.wjemh8.easypanel.host/webhook/0bbfaeaa-d9cb-4a4d-960c-cfedf598e547';
+const SEARCH_WEBHOOK_URL  = 'https://n8n-2025n8n.wjemh8.easypanel.host/webhook/b024bddc-64a5-4561-b0b2-4aba543cf499';
+const RECOVERY_WEBHOOK_URL= 'https://n8n-2025n8n.wjemh8.easypanel.host/webhook/password-recovery';
 
 let videosData = [];
-let userId = null;
+let userId     = null;
 
 // Cookies
 function setCookie(name, value, days) {
@@ -12,11 +12,11 @@ function setCookie(name, value, days) {
   document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
 }
 function getCookie(name) {
-  const nameEQ = name+'=';
+  const nameEQ = name + '=';
   const ca = document.cookie.split(';');
-  for(let c of ca) {
+  for (let c of ca) {
     c = c.trim();
-    if(c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length);
+    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length);
   }
   return null;
 }
@@ -24,11 +24,27 @@ function deleteCookie(name) {
   document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/`;
 }
 
+// Histórico de pesquisas em cookie (24h)
+function getSearchHistory() {
+  const cookie = getCookie('searchHistory');
+  if (!cookie) return [];
+  try {
+    return JSON.parse(cookie);
+  } catch {
+    return [];
+  }
+}
+function addSearchHistory(entry) {
+  const history = getSearchHistory();
+  history.push(entry);
+  setCookie('searchHistory', JSON.stringify(history), 1);
+}
+
 // Verifica login salvo
 function checkExistingLogin() {
   const savedUserId = getCookie('tiktok_user_id');
   const savedEmail  = getCookie('tiktok_user_email');
-  if(savedUserId && savedEmail) {
+  if (savedUserId && savedEmail) {
     userId = savedUserId;
     document.getElementById('loginPopup').style.display = 'none';
     console.log('Login restaurado:', savedEmail);
@@ -39,43 +55,44 @@ function checkExistingLogin() {
 
 // Eventos de login
 document.getElementById('loginButton').addEventListener('click', async () => {
-  const loginBtn  = document.getElementById('loginButton');
-  const email     = document.getElementById('email').value;
-  const password  = document.getElementById('password').value;
-  const loginError= document.getElementById('loginError');
+  const loginBtn   = document.getElementById('loginButton');
+  const email      = document.getElementById('email').value;
+  const password   = document.getElementById('password').value;
+  const loginError = document.getElementById('loginError');
   loginError.classList.remove('show');
   loginError.textContent = '';
 
-  if(!email || !password) {
+  if (!email || !password) {
     loginError.textContent = 'Por favor, preencha todos os campos';
     return loginError.classList.add('show');
   }
 
-  loginBtn.disabled = true;
+  loginBtn.disabled    = true;
   loginBtn.textContent = 'Entrando...';
 
   try {
-    const res = await fetch(LOGIN_WEBHOOK_URL, {
-      method: 'POST',
+    const res    = await fetch(LOGIN_WEBHOOK_URL, {
+      method:  'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ email, password })
+      body:    JSON.stringify({ email, password })
     });
     const result = await res.json();
-    if(result.success) {
+
+    if (result.success) {
       userId = result.userId;
       setCookie('tiktok_user_id', userId, 7);
       setCookie('tiktok_user_email', email, 7);
       document.getElementById('loginPopup').style.display = 'none';
-      setTimeout(()=>document.getElementById('keyword').focus(), 300);
+      setTimeout(() => document.getElementById('keyword').focus(), 300);
     } else {
       loginError.textContent = result.message || 'Login inválido.';
       loginError.classList.add('show');
     }
-  } catch(err) {
+  } catch (err) {
     loginError.textContent = 'Erro ao conectar. Verifique sua internet.';
     loginError.classList.add('show');
   } finally {
-    loginBtn.disabled = false;
+    loginBtn.disabled    = false;
     loginBtn.textContent = 'Entrar Agora';
   }
 });
@@ -99,60 +116,63 @@ document.getElementById('closeRecoveryBtn').addEventListener('click', () => {
 
 // Envia link de recuperação
 document.getElementById('sendRecoveryBtn').addEventListener('click', async () => {
-  const btn      = document.getElementById('sendRecoveryBtn');
-  const email    = document.getElementById('recoveryEmail').value;
-  const msg      = document.getElementById('recoveryMessage');
-  const err      = document.getElementById('recoveryError');
+  const btn = document.getElementById('sendRecoveryBtn');
+  const email = document.getElementById('recoveryEmail').value;
+  const msg = document.getElementById('recoveryMessage');
+  const err = document.getElementById('recoveryError');
   msg.classList.remove('show');
   err.classList.remove('show');
   msg.textContent = err.textContent = '';
 
-  if(!email) {
+  if (!email) {
     err.textContent = 'Por favor, digite seu e-mail';
     return err.classList.add('show');
   }
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if(!emailRegex.test(email)) {
+  if (!emailRegex.test(email)) {
     err.textContent = 'Digite um e-mail válido';
     return err.classList.add('show');
   }
 
-  btn.disabled = true;
+  btn.disabled    = true;
   btn.textContent = 'Enviando...';
 
   try {
-    const res = await fetch(RECOVERY_WEBHOOK_URL, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({email})
+    const res    = await fetch(RECOVERY_WEBHOOK_URL, {
+      method:  'POST',
+      headers: {'Content-Type':'application/json'},
+      body:    JSON.stringify({ email })
     });
     const result = await res.json();
-    if(result.success) {
+
+    if (result.success) {
       msg.textContent = 'Link enviado! Verifique seu e-mail.';
       msg.classList.add('show');
-      setTimeout(()=>{
+      setTimeout(() => {
         document.getElementById('recoveryPopup').style.display = 'none';
         clearRecoveryForm();
-      },3000);
+      }, 3000);
     } else {
       err.textContent = result.message || 'Erro interno.';
       err.classList.add('show');
     }
-  } catch(e) {
+  } catch (e) {
     err.textContent = 'Erro ao conectar.';
     err.classList.add('show');
   } finally {
-    btn.disabled = false;
+    btn.disabled    = false;
     btn.textContent = 'Enviar Link de Recuperação';
   }
 });
+
 function clearRecoveryForm() {
   document.getElementById('recoveryEmail').value = '';
   document.getElementById('recoveryMessage').classList.remove('show');
   document.getElementById('recoveryError').classList.remove('show');
 }
+
 document.getElementById('recoveryPopup').addEventListener('click', e => {
-  if(e.target === document.getElementById('recoveryPopup')) {
+  if (e.target === document.getElementById('recoveryPopup')) {
     document.getElementById('recoveryPopup').style.display = 'none';
     clearRecoveryForm();
   }
@@ -161,9 +181,9 @@ document.getElementById('recoveryPopup').addEventListener('click', e => {
 // Permite Enter nos formulários
 ['email','password','recoveryEmail'].forEach(id => {
   document.getElementById(id).addEventListener('keypress', e => {
-    if(e.key==='Enter') {
-      if(id==='email') document.getElementById('password').focus();
-      else if(id==='password') document.getElementById('loginButton').click();
+    if (e.key === 'Enter') {
+      if (id === 'email') document.getElementById('password').focus();
+      else if (id === 'password') document.getElementById('loginButton').click();
       else document.getElementById('sendRecoveryBtn').click();
     }
   });
@@ -171,8 +191,8 @@ document.getElementById('recoveryPopup').addEventListener('click', e => {
 
 // Helpers de formatação
 function formatNumber(num) {
-  if(num >= 1e6) return (num/1e6).toFixed(1)+'M';
-  if(num >= 1e3) return (num/1e3).toFixed(1)+'K';
+  if (num >= 1e6) return (num/1e6).toFixed(1) + 'M';
+  if (num >= 1e3) return (num/1e3).toFixed(1) + 'K';
   return num.toString();
 }
 function getInitials(name) {
@@ -230,39 +250,54 @@ function createVideoCard(video, index) {
   return card;
 }
 
-// Busca vídeos
+// Busca vídeos e salva histórico
 document.getElementById('searchBtn').addEventListener('click', async () => {
-  if(!userId) {
-    return alert('Você precisa fazer login primeiro!');
+  if (!userId) {
+    alert('Você precisa fazer login primeiro!');
+    return;
   }
+
   const keyword = document.getElementById('keyword').value.trim();
   const region  = document.getElementById('region').value;
   const period  = document.getElementById('period').value;
   const sortBy  = document.getElementById('sortBy').value;
 
-  if(!keyword) {
-    return alert('Por favor, preencha a palavra-chave');
+  if (!keyword) {
+    alert('Por favor, preencha a palavra-chave');
+    return;
   }
 
+  // Salva no histórico
+  const historyEntry = {
+    keyword,
+    region,
+    period,
+    sortBy,
+    timestamp: new Date().toISOString()
+  };
+  addSearchHistory(historyEntry);
+
   document.getElementById('tikTokLogos').style.display = 'none';
-  const btn    = document.getElementById('searchBtn');
-  const loading= document.getElementById('loading');
-  const grid   = document.getElementById('videosGrid');
-  btn.disabled = true;
+  const btn     = document.getElementById('searchBtn');
+  const loading = document.getElementById('loading');
+  const grid    = document.getElementById('videosGrid');
+
+  btn.disabled    = true;
   btn.textContent = 'Buscando...';
   loading.style.display = 'flex';
-  grid.innerHTML = '';
+  grid.innerHTML  = '';
 
   try {
-    const res = await fetch(SEARCH_WEBHOOK_URL, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ keyword, region, period, sortBy, userId })
+    const res  = await fetch(SEARCH_WEBHOOK_URL, {
+      method:  'POST',
+      headers: {'Content-Type':'application/json'},
+      body:    JSON.stringify({ keyword, region, period, sortBy, userId })
     });
     const data = await res.json();
-    if(data.success && data.videos) {
+
+    if (data.success && data.videos) {
       videosData = data.videos;
-      if(videosData.length === 0) {
+      if (videosData.length === 0) {
         grid.innerHTML = `
           <div class="empty-state">
             <span class="emoji">😕</span>
@@ -270,7 +305,7 @@ document.getElementById('searchBtn').addEventListener('click', async () => {
             <p>Tente outras palavras-chave ou filtros</p>
           </div>`;
       } else {
-        videosData.forEach((v,i) => grid.appendChild(createVideoCard(v,i)));
+        videosData.forEach((v, i) => grid.appendChild(createVideoCard(v, i)));
       }
     } else {
       grid.innerHTML = `
@@ -280,7 +315,7 @@ document.getElementById('searchBtn').addEventListener('click', async () => {
           <p>${data.message || 'Tente novamente'}</p>
         </div>`;
     }
-  } catch(err) {
+  } catch (err) {
     grid.innerHTML = `
       <div class="error-state">
         <span class="emoji">⚠️</span>
@@ -289,7 +324,7 @@ document.getElementById('searchBtn').addEventListener('click', async () => {
       </div>`;
   } finally {
     loading.style.display = 'none';
-    btn.disabled = false;
+    btn.disabled    = false;
     btn.textContent = 'Descobrir';
   }
 });
@@ -297,7 +332,7 @@ document.getElementById('searchBtn').addEventListener('click', async () => {
 // Enter na busca
 document.querySelectorAll('#keyword, .form-input, .select-input').forEach(input => {
   input.addEventListener('keypress', e => {
-    if(e.key === 'Enter' && userId) {
+    if (e.key === 'Enter' && userId) {
       document.getElementById('searchBtn').click();
     }
   });
@@ -305,7 +340,7 @@ document.querySelectorAll('#keyword, .form-input, .select-input').forEach(input 
 
 // Auto-focus
 window.addEventListener('load', () => {
-  if(!checkExistingLogin()) {
+  if (!checkExistingLogin()) {
     document.getElementById('email').focus();
   } else {
     setTimeout(() => document.getElementById('keyword').focus(), 100);
@@ -322,36 +357,36 @@ function logout() {
   document.getElementById('password').value = '';
   document.getElementById('email').focus();
 }
-if(getCookie('tiktok_user_id')) {
+if (getCookie('tiktok_user_id')) {
   const headerActions = document.querySelector('.header-actions');
-  const logoutBtn = document.createElement('button');
+  const logoutBtn     = document.createElement('button');
   logoutBtn.textContent = 'Sair';
-  logoutBtn.className = 'logout-btn';
+  logoutBtn.className   = 'logout-btn';
   Object.assign(logoutBtn.style, {
-    background: 'linear-gradient(135deg,var(--tiktok-red),var(--tiktok-accent) 50%,var(--tiktok-cyan))',
-    border: 'none',
-    color: 'var(--tiktok-white)',
-    padding: '8px 16px',
+    background:   'linear-gradient(135deg,var(--tiktok-red),var(--tiktok-accent) 50%,var(--tiktok-cyan))',
+    border:       'none',
+    color:        'var(--tiktok-white)',
+    padding:      '8px 16px',
     borderRadius: '12px',
-    fontSize: '12px',
-    fontWeight: '700',
-    cursor: 'pointer',
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-    position: 'relative',
-    overflow: 'hidden',
-    boxShadow: '0 4px 15px rgba(254,44,85,0.2)'
+    fontSize:     '12px',
+    fontWeight:   '700',
+    cursor:       'pointer',
+    textTransform:'uppercase',
+    letterSpacing:'1px',
+    position:     'relative',
+    overflow:     'hidden',
+    boxShadow:    '0 4px 15px rgba(254,44,85,0.2)'
   });
   logoutBtn.addEventListener('click', logout);
   logoutBtn.addEventListener('mouseenter', () => {
-    logoutBtn.style.transform = 'translateY(-2px)';
-    logoutBtn.style.boxShadow = '0 6px 20px rgba(254,44,85,0.3)';
-    logoutBtn.style.animation = 'gradient-shift 2s ease infinite';
+    logoutBtn.style.transform   = 'translateY(-2px)';
+    logoutBtn.style.boxShadow   = '0 6px 20px rgba(254,44,85,0.3)';
+    logoutBtn.style.animation   = 'gradient-shift 2s ease infinite';
   });
   logoutBtn.addEventListener('mouseleave', () => {
-    logoutBtn.style.transform = 'translateY(0)';
-    logoutBtn.style.boxShadow = '0 4px 15px rgba(254,44,85,0.2)';
-    logoutBtn.style.animation = 'none';
+    logoutBtn.style.transform   = 'translateY(0)';
+    logoutBtn.style.boxShadow   = '0 4px 15px rgba(254,44,85,0.2)';
+    logoutBtn.style.animation   = 'none';
   });
   headerActions.appendChild(logoutBtn);
 }
