@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TikTok Hooks - Descobrir Vídeos Virais</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <!-- Pop-up de Login -->
+  <div class="popup" id="loginPopup">
+    <div class="popup-content">
+      <h3>TikTok Hooks</h3>
+      <p class="popup-subtitle">O radar dos vídeos que todo mundo quer ver!</p>
+      <input type="email" id="email" placeholder="Seu melhor e-mail" required />
+      <input type="password" id="password" placeholder="Sua senha secreta" required />
+      <button id="loginButton">Entrar Agora</button>
+      <div class="forgot-password-link">
+        <span id="forgotPasswordBtn">Esqueci minha senha</span>
+      </div>
+      <div class="divider">
+        <span>Não tem conta?</span>
+      </div>
+      <a href="https://claude.ai/new" target="_blank" id="registerButton" class="register-button">
+        Cadastre-se Grátis
+      </a>
+      <div id="loginError"></div>
+    </div>
+  </div>
+
+  <!-- Pop-up de Recuperação de Senha -->
+  <div class="recovery-popup" id="recoveryPopup">
+    <div class="recovery-content">
+      <button class="close-btn" id="closeRecoveryBtn">×</button>
+      <h3>Recuperar Senha</h3>
+      <p class="recovery-subtitle">Digite seu e-mail e enviaremos um link para redefinir sua senha em poucos segundos</p>
+      <input type="email" id="recoveryEmail" placeholder="Seu e-mail cadastrado" required />
+      <button id="sendRecoveryBtn">Enviar Link de Recuperação</button>
+      <div class="back-to-login-link">
+        <span id="backToLoginBtn">Voltar ao Login</span>
+      </div>
+      <div id="recoveryMessage"></div>
+      <div id="recoveryError"></div>
+    </div>
+  </div>
+
+  <header class="header">
+    <div class="header-top">
+      <div class="logo">
+        <div class="logo-icon">
+          <img src="https://icones.pro/wp-content/uploads/2021/03/logo-icone-tiktok.png" alt="TikTok">
+        </div>
+        <div class="logo-text">
+          <div class="logo-main">TikTok Hooks</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="trending-badge">Em Alta</div>
+      </div>
+    </div>
+    <div class="header-search">
+      <div class="search-container">
+        <form class="search-form">
+          <div class="form-group">
+            <label class="form-label">Palavra-chave</label>
+            <input type="text" id="keyword" class="form-input" placeholder="O que você quer descobrir?">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Região</label>
+            <select id="region" class="select-input">
+              <option value="id">Indonésia</option>
+              <option value="us">Estados Unidos</option>
+              <option value="br">Brasil</option>
+              <option value="mx">México</option>
+              <option value="pk">Paquistão</option>
+              <option value="ph">Filipinas</option>
+              <option value="ru">Rússia</option>
+              <option value="bd">Bangladesh</option>
+              <option value="eg">Egito</option>
+              <option value="vn">Vietnã</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Período</label>
+            <select id="period" class="select-input">
+              <option value="7">7 dias</option>
+              <option value="30">30 dias</option>
+              <option value="90">90 dias</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ordenar</label>
+            <select id="sortBy" class="select-input">
+              <option value="relevance">Relevância</option>
+              <option value="likes">Curtidas</option>
+              <option value="date">Recentes</option>
+            </select>
+          </div>
+          <button type="button" id="searchBtn" class="search-btn">Descobrir</button>
+        </form>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="videos-grid" id="videosGrid"></div>
+    <div class="loading" id="loading" style="display: none;">
+      <div class="spinner"></div>
+      <div class="loading-text">Buscando vídeos incríveis...</div>
+    </div>
+    <div class="tiktok-logos-container" id="tikTokLogos">
+      <!-- Logos animadas repetidas -->
+      <!-- ... -->
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
