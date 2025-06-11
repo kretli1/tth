@@ -225,16 +225,16 @@ body {
   -webkit-background-clip:text; color:transparent;
 }
 .header-actions { display:flex; align-items:center; gap:16px; }
-.back-btn {
+.trending-badge {
   background: linear-gradient(135deg,var(--tiktok-cyan),var(--tiktok-blue) 50%,var(--tiktok-red));
   background-size:200% 200%; animation:gradient-shift 3s ease infinite;
   color:var(--tiktok-white); padding:10px 20px; border-radius:16px;
   font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px;
   box-shadow:0 4px 15px rgba(37,244,238,0.3); text-decoration:none;
   transition:all .3s ease; width:80px; height:40px; display:flex; 
-  justify-content:center; align-items:center;
+  justify-content:center; align-items:center; cursor:pointer;
 }
-.back-btn:hover {
+.trending-badge:hover {
   transform: translateY(-2px);
   box-shadow:0 6px 20px rgba(37,244,238,0.4);
 }
@@ -455,7 +455,7 @@ body {
   .header-top { height:60px; padding:0 20px; }
   .logo-main { font-size:24px; }
   .logo-icon { width:28px; height:28px; font-size:16px; }
-  .back-btn { display:none; }
+  .trending-badge { display:none; }
   .header-search { padding:20px; }
   .search-form { grid-template-columns:1fr; gap:16px; }
   .search-btn { grid-column:span 1; height:56px; font-size:18px; }
