@@ -338,15 +338,6 @@ document.querySelectorAll('#keyword, .form-input, .select-input').forEach(input 
   });
 });
 
-// Auto-focus
-window.addEventListener('load', () => {
-  if (!checkExistingLogin()) {
-    document.getElementById('email').focus();
-  } else {
-    setTimeout(() => document.getElementById('keyword').focus(), 100);
-  }
-});
-
 // Logout opcional
 function logout() {
   deleteCookie('tiktok_user_id');
@@ -357,36 +348,63 @@ function logout() {
   document.getElementById('password').value = '';
   document.getElementById('email').focus();
 }
-if (getCookie('tiktok_user_id')) {
-  const headerActions = document.querySelector('.header-actions');
-  const logoutBtn     = document.createElement('button');
-  logoutBtn.textContent = 'Sair';
-  logoutBtn.className   = 'logout-btn';
-  Object.assign(logoutBtn.style, {
-    background:   'linear-gradient(135deg,var(--tiktok-red),var(--tiktok-accent) 50%,var(--tiktok-cyan))',
-    border:       'none',
-    color:        'var(--tiktok-white)',
-    padding:      '8px 16px',
-    borderRadius: '12px',
-    fontSize:     '12px',
-    fontWeight:   '700',
-    cursor:       'pointer',
-    textTransform:'uppercase',
-    letterSpacing:'1px',
-    position:     'relative',
-    overflow:     'hidden',
-    boxShadow:    '0 4px 15px rgba(254,44,85,0.2)'
-  });
-  logoutBtn.addEventListener('click', logout);
-  logoutBtn.addEventListener('mouseenter', () => {
-    logoutBtn.style.transform   = 'translateY(-2px)';
-    logoutBtn.style.boxShadow   = '0 6px 20px rgba(254,44,85,0.3)';
-    logoutBtn.style.animation   = 'gradient-shift 2s ease infinite';
-  });
-  logoutBtn.addEventListener('mouseleave', () => {
-    logoutBtn.style.transform   = 'translateY(0)';
-    logoutBtn.style.boxShadow   = '0 4px 15px rgba(254,44,85,0.2)';
-    logoutBtn.style.animation   = 'none';
-  });
-  headerActions.appendChild(logoutBtn);
+
+// Adiciona botão de logout com dimensões fixas
+function addLogoutButton() {
+  if (getCookie('tiktok_user_id')) {
+    const headerActions = document.querySelector('.header-actions');
+    const logoutBtn     = document.createElement('button');
+    logoutBtn.textContent = 'Sair';
+    logoutBtn.className   = 'logout-btn';
+    Object.assign(logoutBtn.style, {
+      background:   'linear-gradient(135deg,var(--tiktok-red),var(--tiktok-accent) 50%,var(--tiktok-cyan))',
+      border:       'none',
+      color:        'var(--tiktok-white)',
+      padding:      '10px 20px',
+      borderRadius: '16px',
+      fontSize:     '12px',
+      fontWeight:   '700',
+      cursor:       'pointer',
+      textTransform:'uppercase',
+      letterSpacing:'1px',
+      textDecoration: 'none',
+      transition:   'all .3s ease',
+      boxShadow:    '0 4px 15px rgba(254,44,85,0.3)',
+      width:        '80px',
+      height:       '40px',
+      display:      'flex',
+      justifyContent: 'center',
+      alignItems:   'center'
+    });
+    logoutBtn.addEventListener('click', logout);
+    logoutBtn.addEventListener('mouseenter', () => {
+      logoutBtn.style.transform   = 'translateY(-2px)';
+      logoutBtn.style.boxShadow   = '0 6px 20px rgba(254,44,85,0.4)';
+    });
+    logoutBtn.addEventListener('mouseleave', () => {
+      logoutBtn.style.transform   = 'translateY(0)';
+      logoutBtn.style.boxShadow   = '0 4px 15px rgba(254,44,85,0.3)';
+    });
+    headerActions.appendChild(logoutBtn);
+  }
 }
+
+// Adiciona redirecionamento ao botão "Em Alta"
+document.addEventListener('DOMContentLoaded', () => {
+  const trendingBadge = document.querySelector('.trending-badge');
+  if (trendingBadge) {
+    trendingBadge.addEventListener('click', () => {
+      window.location.href = 'https://app.tiktophooks.com/emalta/';
+    });
+  }
+});
+
+// Auto-focus
+window.addEventListener('load', () => {
+  if (!checkExistingLogin()) {
+    document.getElementById('email').focus();
+  } else {
+    setTimeout(() => document.getElementById('keyword').focus(), 100);
+    addLogoutButton();
+  }
+});
