@@ -225,16 +225,16 @@ body {
   -webkit-background-clip:text; color:transparent;
 }
 .header-actions { display:flex; align-items:center; gap:16px; }
-.trending-badge {
+.back-btn {
   background: linear-gradient(135deg,var(--tiktok-cyan),var(--tiktok-blue) 50%,var(--tiktok-red));
   background-size:200% 200%; animation:gradient-shift 3s ease infinite;
   color:var(--tiktok-white); padding:10px 20px; border-radius:16px;
   font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px;
   box-shadow:0 4px 15px rgba(37,244,238,0.3); text-decoration:none;
   transition:all .3s ease; width:80px; height:40px; display:flex; 
-  justify-content:center; align-items:center; cursor:pointer;
+  justify-content:center; align-items:center;
 }
-.trending-badge:hover {
+.back-btn:hover {
   transform: translateY(-2px);
   box-shadow:0 6px 20px rgba(37,244,238,0.4);
 }
@@ -305,7 +305,7 @@ body {
 
 /* MAIN CONTENT */
 .main-content {
-  margin-top:108px; padding:40px 32px; min-height:calc(100vh - 108px);
+  margin-top:164px; padding:40px 32px; min-height:calc(100vh - 164px);
 }
 .videos-grid {
   display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
@@ -455,12 +455,12 @@ body {
   .header-top { height:60px; padding:0 20px; }
   .logo-main { font-size:24px; }
   .logo-icon { width:28px; height:28px; font-size:16px; }
-  .trending-badge { display:none; }
+  .back-btn { display:none; }
   .header-search { padding:20px; }
   .search-form { grid-template-columns:1fr; gap:16px; }
   .search-btn { grid-column:span 1; height:56px; font-size:18px; }
   .form-input, .select-input { height:48px; font-size:16px; }
-  .main-content { margin-top:88px; padding:24px 20px; }
+  .main-content { margin-top:144px; padding:24px 20px; }
   .videos-grid { grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px; }
   .popup-content, .recovery-content { width:350px; padding:32px 24px; }
   .popup-content h3, .recovery-content h3 { font-size:24px; }
@@ -471,7 +471,7 @@ body {
   .logo-main { font-size:20px; }
   .form-input, .select-input { height:44px; padding:0 16px; font-size:15px; }
   .search-btn { height:50px; font-size:16px; padding:0 24px; }
-  .main-content { margin-top:78px; padding:20px 16px; }
+  .main-content { margin-top:134px; padding:20px 16px; }
   .videos-grid { grid-template-columns:1fr; gap:16px; }
   .video-info { padding:16px; }
   .stats-left { gap:12px; }
