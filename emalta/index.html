@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TikTop Hooks - Trending 24h</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="trending-style.css"/>
+</head>
+<body>
+  <!-- Pop-up de Login -->
+  <div class="popup" id="loginPopup">
+    <div class="popup-content">
+      <h3>TikTop Hooks (BETA)</h3>
+      <p class="popup-subtitle">O radar dos vídeos que todo mundo quer ver!</p>
+      <input type="email" id="email" placeholder="Seu melhor e-mail" required />
+      <input type="password" id="password" placeholder="Sua senha secreta" required />
+      <button id="loginButton">Entrar Agora</button>
+      <div class="forgot-password-link">
+        <span id="forgotPasswordBtn">Esqueci minha senha</span>
+      </div>
+      <div class="divider">
+        <span>Não tem conta?</span>
+      </div>
+      <a href="https://lastlink.com/p/C77832B06/checkout-payment/" target="_blank" id="registerButton" class="register-button">
+        Cadastre-se Grátis
+      </a>
+      <div id="loginError"></div>
+    </div>
+  </div>
+
+  <!-- Pop-up de Recuperação de Senha (começa oculto) -->
+  <div class="recovery-popup" id="recoveryPopup" style="display: none;">
+    <div class="recovery-content">
+      <button class="close-btn" id="closeRecoveryBtn">×</button>
+      <h3>Recuperar Senha</h3>
+      <p class="recovery-subtitle">Digite seu e-mail e enviaremos um link para redefinir sua senha em poucos segundos</p>
+      <input type="email" id="recoveryEmail" placeholder="Seu e-mail cadastrado" required />
+      <button id="sendRecoveryBtn">Enviar Link de Recuperação</button>
+      <div class="back-to-login-link">
+        <span id="backToLoginBtn">Voltar ao Login</span>
+      </div>
+      <div id="recoveryMessage"></div>
+      <div id="recoveryError"></div>
+    </div>
+  </div>
+
+  <header class="header">
+    <div class="header-top">
+      <div class="logo">
+        <div class="logo-icon">
+          <img src="https://icones.pro/wp-content/uploads/2021/03/logo-icone-tiktok.png" alt="TikTok">
+        </div>
+        <div class="logo-text">
+          <div class="logo-main">TikTok Hooks</div>
+          <div class="logo-sub">Trending 24h</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="trending-badge live-badge">🔥 AO VIVO</div>
+        <a href="index.html" class="back-btn">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+          </svg>
+          Buscar
+        </a>
+      </div>
+    </div>
+    <div class="header-stats">
+      <div class="stats-container">
+        <div class="stat-card">
+          <div class="stat-number" id="totalVideos">0</div>
+          <div class="stat-label">Vídeos Trending</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="totalViews">0</div>
+          <div class="stat-label">Visualizações 24h</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="topRegion">--</div>
+          <div class="stat-label">Região Mais Ativa</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="lastUpdate">--</div>
+          <div class="stat-label">Última Atualização</div>
+        </div>
+      </div>
+      <div class="refresh-container">
+        <button id="refreshBtn" class="refresh-btn">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+          </svg>
+          Atualizar
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="trending-header">
+      <h1 class="trending-title">
+        <span class="fire-icon">🔥</span>
+        Trending nas Últimas 24h
+        <span class="fire-icon">🔥</span>
+      </h1>
+      <p class="trending-subtitle">Os vídeos mais vistos pela nossa comunidade, atualizados em tempo real</p>
+    </div>
+
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label class="filter-label">Filtrar por região:</label>
+        <select id="regionFilter" class="filter-select">
+          <option value="">Todas as regiões</option>
+          <option value="id">Indonésia</option>
+          <option value="us">Estados Unidos</option>
+          <option value="br">Brasil</option>
+          <option value="mx">México</option>
+          <option value="pk">Paquistão</option>
+          <option value="ph">Filipinas</option>
+          <option value="ru">Rússia</option>
+          <option value="bd">Bangladesh</option>
+          <option value="eg">Egito</option>
+          <option value="vn">Vietnã</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label class="filter-label">Período:</label>
+        <select id="periodFilter" class="filter-select">
+          <option value="24">Últimas 24h</option>
+          <option value="12">Últimas 12h</option>
+          <option value="6">Últimas 6h</option>
+          <option value="1">Última hora</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="videos-grid" id="videosGrid"></div>
+    
+    <div class="loading" id="loading" style="display: none;">
+      <div class="spinner"></div>
+      <div class="loading-text">Carregando trending...</div>
+    </div>
+
+    <div class="tiktok-logos-container" id="tikTokLogos">
+      <!-- Logos animadas -->
+    </div>
+  </main>
+
+  <script src="trending-script.js"></script>
+</body>
+</html>
