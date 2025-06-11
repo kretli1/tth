@@ -231,12 +231,12 @@ body {
   color:var(--tiktok-white); padding:10px 20px; border-radius:16px;
   font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px;
   box-shadow:0 4px 15px rgba(37,244,238,0.3); text-decoration:none;
-  transition:all .3s ease; width:80px; height:40px; display:flex; 
+  transition:all .3s ease; width:120px; height:40px; display:flex; 
   justify-content:center; align-items:center; cursor:pointer;
 }
 .trending-badge:hover {
   transform: translateY(-2px);
-  box-shadow:0 6px 40px rgba(37,244,238,0.4);
+  box-shadow:0 6px 20px rgba(37,244,238,0.4);
 }
 
 /* SEARCH AREA */
