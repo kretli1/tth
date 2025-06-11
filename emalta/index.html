@@ -239,7 +239,7 @@ body {
   color:var(--tiktok-white); padding:10px 20px; border-radius:16px;
   font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px;
   box-shadow:0 4px 15px rgba(37,244,238,0.3); text-decoration:none;
-  transition:all .3s ease;
+  transition:all .3s ease; width:80px; text-align:center;
 }
 .back-btn:hover {
   transform: translateY(-2px);
@@ -907,7 +907,9 @@ function addLogoutButton() {
       letterSpacing:'1px',
       textDecoration: 'none',
       transition:   'all .3s ease',
-      boxShadow:    '0 4px 15px rgba(254,44,85,0.3)'
+      boxShadow:    '0 4px 15px rgba(254,44,85,0.3)',
+      width:        '80px',
+      textAlign:    'center'
     });
     logoutBtn.addEventListener('click', logout);
     logoutBtn.addEventListener('mouseenter', () => {
