@@ -123,11 +123,11 @@ body {
 }
 .forgot-password-link span, .back-to-login-link span {
   color:var(--tiktok-cyan); font-size:14px; font-weight:500;
-  cursor:pointer; text-decoration:underline; text-decoration-color:transparent;
+  cursor:pointer; text-decoration:none;
   transition:all .3s ease;
 }
 .forgot-password-link span:hover, .back-to-login-link span:hover {
-  color:var(--tiktok-white); text-decoration-color:var(--tiktok-cyan);
+  color:var(--tiktok-white);
   transform: translateY(-1px);
 }
 
