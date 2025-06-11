@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>2 TikTop Hooks - Em Alta</title>
+  <title>TikTop Hooks - Em Alta</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
 /* Reset e variáveis */
@@ -432,6 +432,22 @@ body {
   font-size:64px; margin-bottom:20px; display:block;
 }
 
+/* DEBUG INFO */
+.debug-info {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--tiktok-dark);
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 12px;
+  color: var(--tiktok-cyan);
+  border: 1px solid var(--tiktok-border);
+  max-width: 300px;
+  z-index: 1000;
+  display: none;
+}
+
 /* RESPONSIVE */
 @media (max-width:1200px) {
   .search-form { grid-template-columns:1fr 1fr 1fr; gap:16px; }
@@ -504,6 +520,12 @@ body {
     </div>
   </div>
 
+  <!-- Debug Info -->
+  <div class="debug-info" id="debugInfo">
+    <strong>Debug Info:</strong><br>
+    <span id="debugText">Aguardando dados...</span>
+  </div>
+
   <header class="header">
     <div class="header-top">
       <div class="logo">
@@ -516,6 +538,7 @@ body {
       </div>
       <div class="header-actions">
         <a href="https://app.tiktophooks.com/" class="back-btn">← Voltar</a>
+        <button id="toggleDebug" style="background: var(--tiktok-gray); border: none; color: white; padding: 8px 12px; border-radius: 8px; font-size: 12px; cursor: pointer;">Debug</button>
       </div>
     </div>
     <div class="header-search">
@@ -579,6 +602,25 @@ let videosData = [];
 let filteredData = [];
 let userId = null;
 let autoRefreshInterval = null;
+let debugMode = false;
+
+// Função de debug
+function debugLog(message, data = null) {
+  console.log('[DEBUG]', message, data);
+  if (debugMode) {
+    const debugEl = document.getElementById('debugText');
+    if (debugEl) {
+      debugEl.innerHTML = `${message}<br>${data ? JSON.stringify(data, null, 2).substring(0, 200) + '...' : ''}`;
+    }
+  }
+}
+
+// Toggle debug
+document.getElementById('toggleDebug').addEventListener('click', () => {
+  debugMode = !debugMode;
+  const debugInfo = document.getElementById('debugInfo');
+  debugInfo.style.display = debugMode ? 'block' : 'none';
+});
 
 // Cookies
 function setCookie(name, value, days) {
@@ -606,7 +648,7 @@ function checkExistingLogin() {
   if (savedUserId && savedEmail) {
     userId = savedUserId;
     document.getElementById('loginPopup').style.display = 'none';
-    console.log('Login restaurado:', savedEmail);
+    debugLog('Login restaurado:', savedEmail);
     return true;
   }
   return false;
@@ -630,12 +672,14 @@ document.getElementById('loginButton').addEventListener('click', async () => {
   loginBtn.textContent = 'Entrando...';
 
   try {
+    debugLog('Tentando login para:', email);
     const res    = await fetch(LOGIN_WEBHOOK_URL, {
       method:  'POST',
       headers: {'Content-Type':'application/json'},
       body:    JSON.stringify({ email, password })
     });
     const result = await res.json();
+    debugLog('Resposta do login:', result);
 
     if (result.success) {
       userId = result.userId;
@@ -649,6 +693,7 @@ document.getElementById('loginButton').addEventListener('click', async () => {
       loginError.classList.add('show');
     }
   } catch (err) {
+    debugLog('Erro no login:', err);
     loginError.textContent = 'Erro ao conectar. Verifique sua internet.';
     loginError.classList.add('show');
   } finally {
@@ -753,28 +798,133 @@ document.getElementById('recoveryPopup').addEventListener('click', e => {
 function formatNumber(num) {
   if (num >= 1e6) return (num/1e6).toFixed(1) + 'M';
   if (num >= 1e3) return (num/1e3).toFixed(1) + 'K';
-  return num.toString();
+  return num?.toString() || '0';
 }
 function getInitials(name) {
   return name ? name.charAt(0).toUpperCase() : '?';
+}
+
+// Função para extrair dados dos vídeos (com múltiplas tentativas de estruturas)
+function extractVideoData(rawData) {
+  debugLog('Dados brutos recebidos:', rawData);
+  
+  let videos = [];
+  
+  // Tentativa 1: Array direto
+  if (Array.isArray(rawData)) {
+    videos = rawData;
+    debugLog('Estrutura detectada: Array direto');
+  }
+  // Tentativa 2: Objeto com propriedade 'videos'
+  else if (rawData && rawData.videos && Array.isArray(rawData.videos)) {
+    videos = rawData.videos;
+    debugLog('Estrutura detectada: rawData.videos');
+  }
+  // Tentativa 3: Objeto com 'data.videos'
+  else if (rawData && rawData.data && Array.isArray(rawData.data.videos)) {
+    videos = rawData.data.videos;
+    debugLog('Estrutura detectada: rawData.data.videos');
+  }
+  // Tentativa 4: Dados do Supabase (array de registros)
+  else if (rawData && Array.isArray(rawData)) {
+    videos = rawData;
+    debugLog('Estrutura detectada: Array do Supabase');
+  }
+  // Tentativa 5: Vídeo único
+  else if (rawData && (rawData.aweme_id || rawData.video_id || rawData.title)) {
+    videos = [rawData];
+    debugLog('Estrutura detectada: Vídeo único');
+  }
+  
+  debugLog(`Total de vídeos extraídos: ${videos.length}`);
+  
+  // Processar e normalizar os vídeos
+  const processedVideos = videos.map((video, index) => {
+    if (!video) return null;
+    
+    // Tentar extrair dados do autor
+    let authorData = {};
+    if (video.author) {
+      authorData = video.author;
+    } else if (video.author_nickname || video.author_id) {
+      authorData = {
+        id: video.author_id,
+        unique_id: video.author_unique_id,
+        nickname: video.author_nickname,
+        avatar: video.author_avatar
+      };
+    }
+    
+    // Tentar extrair informações de música
+    let musicData = {};
+    if (video.music_info) {
+      musicData = video.music_info;
+    } else if (video.music_id || video.music_title) {
+      musicData = {
+        id: video.music_id,
+        title: video.music_title,
+        author: video.music_author
+      };
+    }
+    
+    const processed = {
+      aweme_id: video.aweme_id || video.video_id || video.id || null,
+      video_id: video.video_id || video.aweme_id || video.id || null,
+      title: video.title || video.desc || 'Sem título',
+      duration: video.duration || 0,
+      play: video.play || video.video_url || video.url || null,
+      wmplay: video.wmplay || video.play || null,
+      cover: video.cover || video.thumbnail || video.cover_url || null,
+      author: {
+        id: authorData.id || null,
+        unique_id: authorData.unique_id || authorData.uniqueId || null,
+        nickname: authorData.nickname || authorData.nickName || 'Autor desconhecido',
+        avatar: authorData.avatar || authorData.avatarUrl || null
+      },
+      play_count: parseInt(video.play_count || video.playCount || 0),
+      digg_count: parseInt(video.digg_count || video.diggCount || video.like_count || video.likeCount || 0),
+      comment_count: parseInt(video.comment_count || video.commentCount || 0),
+      share_count: parseInt(video.share_count || video.shareCount || 0),
+      download_count: parseInt(video.download_count || video.downloadCount || 0),
+      music_info: musicData,
+      create_time: video.create_time || video.createTime || video.created_at || null,
+      region: video.region || null
+    };
+    
+    debugLog(`Vídeo ${index + 1} processado:`, processed.title);
+    return processed;
+  }).filter(video => video !== null);
+  
+  debugLog(`Total de vídeos válidos processados: ${processedVideos.length}`);
+  return processedVideos;
 }
 
 // Cria o card de vídeo
 function createVideoCard(video, index) {
   const card = document.createElement('div');
   card.className = 'video-card';
+  
+  // Usar nickname do autor corretamente
+  const authorNickname = video.author?.nickname || 'usuario';
+  
   card.innerHTML = `
     <div class="video-wrapper">
-      <video class="video-player" controls preload="metadata">
-        <source src="${video.play}" type="video/mp4">
-        Seu navegador não suporta vídeo.
-      </video>
+      ${video.play ? `
+        <video class="video-player" controls preload="metadata">
+          <source src="${video.play}" type="video/mp4">
+          Seu navegador não suporta vídeo.
+        </video>
+      ` : `
+        <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--tiktok-gray);">
+          Vídeo não disponível
+        </div>
+      `}
     </div>
     <div class="video-info">
       <div class="video-title">${video.title || 'Sem título'}</div>
       <div class="video-author">
-        <div class="author-avatar">${getInitials(video.author_nickname)}</div>
-        <span class="author-name">@${video.author_nickname || 'usuario'}</span>
+        <div class="author-avatar">${getInitials(authorNickname)}</div>
+        <span class="author-name">@${authorNickname}</span>
       </div>
       <div class="video-stats">
         <div class="stats-left">
@@ -783,25 +933,25 @@ function createVideoCard(video, index) {
               <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
               <circle cx="12" cy="12" r="3"/>
             </svg>
-            ${formatNumber(video.play_count || 0)}
+            ${formatNumber(video.play_count)}
           </div>
           <div class="stat-item">
             <svg class="stat-icon" fill="currentColor" viewBox="0 0 24 24">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
             </svg>
-            ${formatNumber(video.digg_count || 0)}
+            ${formatNumber(video.digg_count)}
           </div>
           <div class="stat-item">
             <svg class="stat-icon" fill="currentColor" viewBox="0 0 24 24">
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
             </svg>
-            ${formatNumber(video.comment_count || 0)}
+            ${formatNumber(video.comment_count)}
           </div>
           <div class="stat-item">
             <svg class="stat-icon" fill="currentColor" viewBox="0 0 24 24">
               <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
             </svg>
-            ${formatNumber(video.share_count || 0)}
+            ${formatNumber(video.share_count)}
           </div>
         </div>
       </div>
@@ -810,94 +960,60 @@ function createVideoCard(video, index) {
   return card;
 }
 
-// FUNÇÃO LOADVIDEOS CORRIGIDA
+// Carrega vídeos
 async function loadVideos() {
   const loading = document.getElementById('loading');
   const grid    = document.getElementById('videosGrid');
 
   loading.style.display = 'flex';
   grid.innerHTML = '';
+  
+  debugLog('Iniciando carregamento de vídeos para userId:', userId);
 
   try {
-    console.log('🔄 Iniciando carregamento de vídeos...');
-    console.log('📡 URL do webhook:', VIDEOS_WEBHOOK_URL);
-    console.log('👤 User ID:', userId);
-
-    const res = await fetch(VIDEOS_WEBHOOK_URL, {
+    const requestBody = { userId: userId || '2' };
+    debugLog('Enviando requisição:', requestBody);
+    
+    const res  = await fetch(VIDEOS_WEBHOOK_URL, {
       method:  'POST',
       headers: {'Content-Type':'application/json'},
-      body:    JSON.stringify({ userId })
+      body:    JSON.stringify(requestBody)
     });
-
-    console.log('📊 Status da resposta:', res.status);
     
-    const data = await res.json();
+    debugLog('Status da resposta:', res.status);
     
-    console.log('📦 Dados recebidos:', data);
-    console.log('📦 Tipo dos dados:', typeof data);
-    console.log('📦 É array?', Array.isArray(data));
-
-    // Verificar diferentes estruturas possíveis de resposta
-    let videos = [];
-    
-    if (Array.isArray(data)) {
-      videos = data;
-      console.log('✅ Dados são um array direto');
-    } else if (data && data.videos && Array.isArray(data.videos)) {
-      videos = data.videos;
-      console.log('✅ Dados estão em data.videos');
-    } else if (data && Array.isArray(data.data)) {
-      videos = data.data;
-      console.log('✅ Dados estão em data.data');
-    } else {
-      console.log('❌ Estrutura de dados não reconhecida:', data);
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
     }
-
-    console.log('🎬 Total de vídeos encontrados:', videos.length);
-
-    if (videos.length > 0) {
-      // Mapear os campos do Supabase para o formato esperado
-      videosData = videos.map((video, index) => {
-        console.log(`🎥 Processando vídeo ${index + 1}:`, video);
-        
-        return {
-          aweme_id: video.aweme_id || video.id,
-          video_id: video.video_id || video.aweme_id,
-          title: video.title || 'Sem título',
-          duration: video.duration || 0,
-          play: video.play || video.video_url,
-          wmplay: video.wmplay || video.play,
-          cover: video.cover || video.thumbnail,
-          author_nickname: video.author_nickname || video.author?.nickname || 'Usuario',
-          play_count: parseInt(video.play_count) || 0,
-          digg_count: parseInt(video.digg_count) || 0,
-          comment_count: parseInt(video.comment_count) || 0,
-          share_count: parseInt(video.share_count) || 0,
-          download_count: parseInt(video.download_count) || 0,
-          create_time: video.create_time || video.created_at,
-          region: video.region || 'br'
-        };
-      });
-      
+    
+    const rawData = await res.json();
+    debugLog('Dados brutos recebidos do webhook:', rawData);
+    
+    // Extrair e processar vídeos usando a nova função
+    const processedVideos = extractVideoData(rawData);
+    
+    if (processedVideos && processedVideos.length > 0) {
+      videosData = processedVideos;
       filteredData = [...videosData];
-      console.log('✅ Vídeos processados com sucesso:', videosData.length);
+      debugLog('Vídeos carregados com sucesso:', videosData.length);
       renderVideos();
     } else {
-      console.log('❌ Nenhum vídeo encontrado');
+      debugLog('Nenhum vídeo encontrado nos dados');
       grid.innerHTML = `
         <div class="error-state">
-          <span class="emoji">📱</span>
-          <h3>Nenhum vídeo encontrado</h3>
-          <p>Não há vídeos disponíveis no momento. Tente novamente mais tarde.</p>
+          <span class="emoji">⏰</span>
+          <h3>Nenhum vídeo disponível</h3>
+          <p>Nenhum vídeo foi encontrado no momento. Tente novamente em alguns minutos.</p>
         </div>`;
     }
   } catch (err) {
-    console.error('❌ Erro ao carregar vídeos:', err);
+    debugLog('Erro ao carregar vídeos:', err);
+    console.error('Erro ao carregar vídeos:', err);
     grid.innerHTML = `
       <div class="error-state">
-        <span class="emoji">⚠️</span>
-        <h3>Erro de conexão</h3>
-        <p>Não foi possível carregar os vídeos. Verifique sua conexão e tente novamente.</p>
+        <span class="emoji">❌</span>
+        <h3>Erro ao carregar</h3>
+        <p>Erro ao carregar os dados: ${err.message}. Tente novamente em alguns minutos.</p>
       </div>`;
   } finally {
     loading.style.display = 'none';
@@ -908,6 +1024,8 @@ async function loadVideos() {
 function renderVideos() {
   const grid = document.getElementById('videosGrid');
   grid.innerHTML = '';
+  
+  debugLog('Renderizando vídeos:', filteredData.length);
   
   if (filteredData.length === 0) {
     grid.innerHTML = `
@@ -920,8 +1038,15 @@ function renderVideos() {
   }
 
   filteredData.forEach((video, index) => {
-    grid.appendChild(createVideoCard(video, index));
+    try {
+      const cardElement = createVideoCard(video, index);
+      grid.appendChild(cardElement);
+    } catch (err) {
+      debugLog(`Erro ao criar card do vídeo ${index}:`, err);
+    }
   });
+  
+  debugLog('Renderização concluída');
 }
 
 // Aplica filtros
@@ -931,12 +1056,14 @@ function applyFilters() {
   const period = parseInt(document.getElementById('period').value);
   const sortBy = document.getElementById('sortBy').value;
 
+  debugLog('Aplicando filtros:', { keyword, region, period, sortBy });
+
   // Filtra por palavra-chave
   let filtered = videosData;
   if (keyword) {
     filtered = filtered.filter(video => 
       (video.title && video.title.toLowerCase().includes(keyword)) ||
-      (video.author_nickname && video.author_nickname.toLowerCase().includes(keyword))
+      (video.author?.nickname && video.author.nickname.toLowerCase().includes(keyword))
     );
   }
 
@@ -949,10 +1076,10 @@ function applyFilters() {
 
   // Filtra por período (baseado na data de criação)
   const now = new Date();
-  const periodMs = period * 24 * 60 * 60 * 1000; // período em millisegundos
+  const periodMs = period * 24 * 60 * 60 * 1000;
   filtered = filtered.filter(video => {
     if (!video.create_time) return true;
-    const videoDate = new Date(video.create_time * 1000); // converte timestamp para data
+    const videoDate = new Date(video.create_time * 1000);
     return (now - videoDate) <= periodMs;
   });
 
@@ -962,9 +1089,9 @@ function applyFilters() {
   } else if (sortBy === '3') { // Por recentes
     filtered.sort((a, b) => (b.create_time || 0) - (a.create_time || 0));
   }
-  // sortBy === '0' (Relevância) mantém ordem original
 
   filteredData = filtered;
+  debugLog('Filtros aplicados, resultados:', filteredData.length);
   renderVideos();
 }
 
@@ -982,16 +1109,14 @@ document.querySelectorAll('#keyword, .form-input, .select-input').forEach(input 
 
 // Auto-refresh a cada 5 minutos
 function startAutoRefresh() {
-  // Limpa qualquer interval anterior
   if (autoRefreshInterval) {
     clearInterval(autoRefreshInterval);
   }
   
-  // Define novo interval
   autoRefreshInterval = setInterval(() => {
-    console.log('Auto-refresh: Carregando novos vídeos...');
+    debugLog('Auto-refresh: Carregando novos vídeos...');
     loadVideos();
-  }, 5 * 60 * 1000); // 5 minutos
+  }, 5 * 60 * 1000);
 }
 
 // Logout opcional
@@ -1050,6 +1175,8 @@ function addLogoutButton() {
 
 // Inicialização
 window.addEventListener('load', () => {
+  debugLog('Página carregada, iniciando aplicação...');
+  
   if (checkExistingLogin()) {
     loadVideos();
     startAutoRefresh();
