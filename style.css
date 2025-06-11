@@ -236,7 +236,7 @@ body {
 }
 .trending-badge:hover {
   transform: translateY(-2px);
-  box-shadow:0 6px 20px rgba(37,244,238,0.4);
+  box-shadow:0 6px 40px rgba(37,244,238,0.4);
 }
 
 /* SEARCH AREA */
