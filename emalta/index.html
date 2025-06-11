@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TikTop Hooks - Em Alta</title>
+  <title>2 TikTop Hooks - Em Alta</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
 /* Reset e variáveis */
@@ -443,9 +443,13 @@ body {
   font-size: 12px;
   color: var(--tiktok-cyan);
   border: 1px solid var(--tiktok-border);
-  max-width: 300px;
+  max-width: 350px;
+  max-height: 300px;
+  overflow-y: auto;
   z-index: 1000;
-  display: none;
+  font-family: 'Courier New', monospace;
+  white-space: pre-wrap;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.5);
 }
 
 /* RESPONSIVE */
@@ -538,7 +542,7 @@ body {
       </div>
       <div class="header-actions">
         <a href="https://app.tiktophooks.com/" class="back-btn">← Voltar</a>
-        <button id="toggleDebug" style="background: var(--tiktok-gray); border: none; color: white; padding: 8px 12px; border-radius: 8px; font-size: 12px; cursor: pointer;">Debug</button>
+        <button id="toggleDebug" style="background: var(--tiktok-cyan); border: none; color: var(--tiktok-black); padding: 8px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; font-weight: 600;">Debug ON</button>
       </div>
     </div>
     <div class="header-search">
@@ -602,24 +606,53 @@ let videosData = [];
 let filteredData = [];
 let userId = null;
 let autoRefreshInterval = null;
-let debugMode = false;
+let debugMode = true; // Ativado por padrão para depuração
 
-// Função de debug
+// Função de debug melhorada
 function debugLog(message, data = null) {
-  console.log('[DEBUG]', message, data);
+  const timestamp = new Date().toLocaleTimeString();
+  console.log(`[${timestamp}] [DEBUG]`, message, data);
+  
   if (debugMode) {
     const debugEl = document.getElementById('debugText');
     if (debugEl) {
-      debugEl.innerHTML = `${message}<br>${data ? JSON.stringify(data, null, 2).substring(0, 200) + '...' : ''}`;
+      let logText = `[${timestamp}] ${message}`;
+      if (data) {
+        logText += `\n${JSON.stringify(data, null, 2).substring(0, 300)}`;
+        if (JSON.stringify(data, null, 2).length > 300) {
+          logText += '...';
+        }
+      }
+      
+      // Manter apenas os últimos 5 logs
+      const currentLogs = debugEl.innerHTML.split('\n---\n');
+      if (currentLogs.length >= 5) {
+        currentLogs.shift();
+      }
+      currentLogs.push(logText);
+      debugEl.innerHTML = currentLogs.join('\n---\n');
+      
+      // Scroll para o final
+      const debugInfo = document.getElementById('debugInfo');
+      debugInfo.scrollTop = debugInfo.scrollHeight;
     }
   }
 }
 
-// Toggle debug
+// Toggle debug melhorado
 document.getElementById('toggleDebug').addEventListener('click', () => {
   debugMode = !debugMode;
   const debugInfo = document.getElementById('debugInfo');
+  const toggleBtn = document.getElementById('toggleDebug');
+  
   debugInfo.style.display = debugMode ? 'block' : 'none';
+  toggleBtn.textContent = debugMode ? 'Debug ON' : 'Debug OFF';
+  toggleBtn.style.background = debugMode ? 'var(--tiktok-cyan)' : 'var(--tiktok-gray)';
+  toggleBtn.style.color = debugMode ? 'var(--tiktok-black)' : 'white';
+  
+  if (debugMode) {
+    debugLog('Debug mode ativado pelo usuário');
+  }
 });
 
 // Cookies
@@ -1176,6 +1209,10 @@ function addLogoutButton() {
 // Inicialização
 window.addEventListener('load', () => {
   debugLog('Página carregada, iniciando aplicação...');
+  
+  // Ativar debug automaticamente
+  document.getElementById('debugInfo').style.display = 'block';
+  debugLog('Modo debug ativado automaticamente');
   
   if (checkExistingLogin()) {
     loadVideos();
