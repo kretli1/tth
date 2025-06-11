@@ -349,7 +349,7 @@ function logout() {
   document.getElementById('email').focus();
 }
 
-// Adiciona botão de logout com dimensões fixas
+// Adiciona botão de logout com dimensões fixas corrigidas
 function addLogoutButton() {
   if (getCookie('tiktok_user_id')) {
     const headerActions = document.querySelector('.header-actions');
@@ -388,16 +388,6 @@ function addLogoutButton() {
     headerActions.appendChild(logoutBtn);
   }
 }
-
-// Adiciona redirecionamento ao botão "Em Alta"
-document.addEventListener('DOMContentLoaded', () => {
-  const trendingBadge = document.querySelector('.trending-badge');
-  if (trendingBadge) {
-    trendingBadge.addEventListener('click', () => {
-      window.location.href = 'https://app.tiktophooks.com/emalta/';
-    });
-  }
-});
 
 // Auto-focus
 window.addEventListener('load', () => {
