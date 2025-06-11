@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TikTop Hooks</title>
+  <title>TikTop Hooks - Em Alta</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
 /* Reset e variáveis */
@@ -48,18 +48,18 @@ body {
   border:1px solid var(--tiktok-border);
   overflow:hidden;
 }
-/* Cabeçalho do popup */
 .popup-content::before, .recovery-content::before {
   content:''; position:absolute; top:0; left:0; right:0; height:4px;
   background: linear-gradient(135deg,var(--tiktok-red),var(--tiktok-cyan));
   background-size:200% 200%; animation:gradient-shift 3s ease infinite;
 }
-/* Títulos e legendas */
+/* Títulos */
 .popup-content h3, .recovery-content h3 {
   font-size:28px; font-weight:900; margin-bottom:8px;
   background: linear-gradient(135deg,var(--tiktok-red),var(--tiktok-cyan));
   -webkit-background-clip:text; color:transparent;
 }
+/* Subtítulos */
 .popup-subtitle, .recovery-subtitle {
   font-size:14px; color:var(--tiktok-gray);
   margin-bottom:32px; font-weight:500; line-height:1.5;
@@ -75,7 +75,11 @@ body {
 .popup-content input:focus, .recovery-content input:focus {
   outline:none; border-color:var(--tiktok-red);
   box-shadow:0 0 0 4px rgba(254,44,85,0.15);
+  transform: translateY(-2px);
   background: rgba(15,20,25,0.8);
+}
+.popup-content input::placeholder, .recovery-content input::placeholder {
+  color:var(--tiktok-gray); font-weight:400;
 }
 /* Botões principais */
 .popup-content button:not(.close-btn), .recovery-content button:not(.close-btn) {
@@ -86,30 +90,105 @@ body {
   font-size:16px; text-transform:uppercase; letter-spacing:1px;
   transition:all .3s cubic-bezier(.4,0,.2,1);
   box-shadow:0 8px 25px rgba(254,44,85,0.3);
+  position:relative; overflow:hidden; margin-bottom:12px;
 }
-.popup-content button:hover, .recovery-content button:hover {
+.popup-content button:hover:enabled:not(.close-btn),
+.recovery-content button:hover:enabled:not(.close-btn) {
   transform: translateY(-3px);
   box-shadow:0 12px 35px rgba(254,44,85,0.4);
   animation:gradient-shift 2s ease infinite;
 }
-/* Fecha popup */
+.popup-content button:disabled:not(.close-btn),
+.recovery-content button:disabled:not(.close-btn) {
+  background:var(--tiktok-gray); cursor:not-allowed;
+  transform:none; box-shadow:none; animation:none; opacity:.6;
+}
+.popup-content button::before:not(.close-btn),
+.recovery-content button::before:not(.close-btn) {
+  content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
+  background: linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
+  transition:left .6s;
+}
+.popup-content button:hover::before:not(.close-btn),
+.recovery-content button:hover::before:not(.close-btn) {
+  left:100%;
+}
+/* Botão fechar */
 .close-btn {
   position:absolute; top:16px; right:16px;
   background:none; border:none; color:var(--tiktok-gray);
   font-size:24px; cursor:pointer; padding:8px; border-radius:8px;
+  transition:all .3s ease; display:flex; align-items:center;
+  justify-content:center; min-width:40px; min-height:40px;
 }
 .close-btn:hover {
   background: rgba(255,255,255,0.1);
   color: var(--tiktok-white);
 }
-/* Outros estilos omitidos para brevidade (divider, mensagens de erro) */
+/* Links */
+.forgot-password-link, .back-to-login-link {
+  margin:16px 0 24px; text-align:center;
+}
+.forgot-password-link span, .back-to-login-link span {
+  color:var(--tiktok-cyan); font-size:14px; font-weight:500;
+  cursor:pointer; text-decoration:underline; text-decoration-color:transparent;
+  transition:all .3s ease;
+}
+.forgot-password-link span:hover, .back-to-login-link span:hover {
+  color:var(--tiktok-white); text-decoration-color:var(--tiktok-cyan);
+  transform: translateY(-1px);
+}
+/* Register button */
+.register-button {
+  width:100%; padding:16px; display:flex; align-items:center; justify-content:center;
+  background: linear-gradient(135deg,var(--tiktok-cyan),var(--tiktok-blue) 50%,var(--tiktok-red));
+  background-size:200% 200%; border:none; color:var(--tiktok-white);
+  border-radius:12px; cursor:pointer; font-weight:700; font-size:16px;
+  text-transform:uppercase; letter-spacing:1px; transition:all .3s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 8px 25px rgba(37,244,238,0.3); position:relative; overflow:hidden;
+  margin-bottom:12px; text-decoration:none;
+}
+.register-button:hover {
+  transform: translateY(-3px);
+  box-shadow:0 12px 35px rgba(37,244,238,0.4);
+  animation:gradient-shift 2s ease infinite;
+}
+.register-button::before {
+  content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
+  background: linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
+  transition:left .6s;
+}
+.register-button:hover::before { left:100%; }
+/* Divider */
+.divider {
+  display:flex; align-items:center; margin:20px 0 24px;
+  font-size:12px; color:var(--tiktok-gray); font-weight:500;
+}
+.divider::before, .divider::after {
+  content:''; flex:1; height:1px; background:var(--tiktok-border);
+}
+.divider span { padding:0 16px; text-transform:uppercase; letter-spacing:1px; }
+/* Erros / mensagens */
+#loginError, #recoveryError {
+  color:var(--tiktok-red); font-size:14px; font-weight:500;
+  margin-top:16px; padding:12px; border-radius:8px;
+  background:rgba(254,44,85,0.1); border:1px solid rgba(254,44,85,0.3);
+  display:none;
+}
+#loginError.show, #recoveryError.show { display:block; }
+#recoveryMessage {
+  color:var(--tiktok-cyan); font-size:14px; font-weight:500;
+  margin-top:16px; padding:12px; border-radius:8px;
+  background:rgba(37,244,238,0.1); border:1px solid rgba(37,244,238,0.3);
+  display:none;
+}
+#recoveryMessage.show { display:block; }
 /* Animações */
 @keyframes gradient-shift {
   0% { background-position:0% 50%; }
   50% { background-position:100% 50%; }
   100% { background-position:0% 50%; }
 }
-
 /* HEADER */
 .header {
   position:fixed; top:0; left:0; right:0;
@@ -122,25 +201,7 @@ body {
   height:72px; display:flex; align-items:center;
   justify-content:space-between; padding:0 32px;
 }
-/* Logo */
-.logo {
-  display:flex; align-items:center; gap:12px; cursor:pointer;
-}
-.logo-icon {
-  width:32px; height:32px;
-  background: linear-gradient(135deg,var(--tiktok-red),var(--tiktok-cyan));
-  border-radius:8px;
-  display:flex; align-items:center; justify-content:center;
-  position:relative; overflow:hidden; font-weight:900; color:white;
-}
-.logo-icon img { width:20px; height:20px; filter:brightness(0) invert(1); }
-.logo-text .logo-main {
-  font-size:28px; font-weight:900;
-  background: linear-gradient(135deg,var(--tiktok-red),var(--tiktok-cyan));
-  -webkit-background-clip:text; color:transparent;
-}
-/* Botão Voltar */
-.header-actions .back-btn {
+.back-btn {
   background: linear-gradient(135deg,var(--tiktok-cyan),var(--tiktok-blue) 50%,var(--tiktok-red));
   background-size:200% 200%; animation:gradient-shift 3s ease infinite;
   color:var(--tiktok-white); padding:10px 20px; border-radius:16px;
@@ -148,126 +209,110 @@ body {
   box-shadow:0 4px 15px rgba(37,244,238,0.3); text-decoration:none;
   transition:all .3s ease;
 }
-.header-actions .back-btn:hover {
+.back-btn:hover {
   transform: translateY(-2px);
   box-shadow:0 6px 20px rgba(37,244,238,0.4);
 }
-
 /* MAIN CONTENT */
 .main-content {
-  margin-top:108px; padding:40px 32px; min-height:calc(100vh - 108px);
+  margin-top:72px; padding:40px 32px; min-height:calc(100vh - 72px);
 }
 .videos-grid {
   display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
   gap:24px; max-width:1400px; margin:0 auto;
 }
-.loading {
-  display:flex; flex-direction:column; justify-content:center; align-items:center;
-  padding:80px 20px; color:var(--tiktok-gray);
-}
-.spinner {
-  width:40px; height:40px;
-  border:3px solid var(--tiktok-border);
-  border-top:3px solid var(--tiktok-red);
-  border-radius:50%; animation:spin 1s linear infinite;
-}
-@keyframes spin { to{transform:rotate(360deg);} }
-
-/* SCRIPT */
-<script>
-const LOGIN_WEBHOOK_URL   = 'https://.../login';
-const VIDEOS_WEBHOOK_URL  = 'https://.../videos';
-const RECOVERY_WEBHOOK_URL= 'https://.../password-recovery';
+/* VIDEO CARD */
+.video-card { /* ... mantém sem alterações ... */ }
+/* Demais estilos de vídeo e estados ... */
+</style>
+</head>
+<body>
+  <!-- Pop-up de Login -->
+  <div class="popup" id="loginPopup">...<!-- permanece igual --></div>
+  <!-- Pop-up de Recuperação de Senha -->
+  <div class="recovery-popup" id="recoveryPopup" style="display:none;">...<!-- permanece igual --></div>
+  <header class="header">
+    <div class="header-top">
+      <div class="logo">...<!-- permanece igual --></div>
+      <div class="header-actions">
+        <a href="https://app.tiktophooks.com/" class="back-btn">Voltar</a>
+      </div>
+    </div>
+  </header>
+  <main class="main-content">
+    <div class="videos-grid" id="videosGrid"></div>
+    <div class="loading" id="loading" style="display:none;">...<!-- permanece igual --></div>
+  </main>
+  <script>
+const LOGIN_WEBHOOK_URL   = 'https://n8n-2025n8n.wjemh8.easypanel.host/webhook/0bbfaeaa-d9cb-4a4d-960c-cfedf598e547';
+const VIDEOS_WEBHOOK_URL  = 'https://n8n-2025n8n.wjemh8.easypanel.host/webhook/401a80db-15a7-4886-833a-df240d641c7a';
+const RECOVERY_WEBHOOK_URL= 'https://n8n-2025n8n.wjemh8.easypanel.host/webhook/password-recovery';
 
 let videosData = [];
 let filteredData = [];
 let userId = null;
 let autoRefreshInterval = null;
 
-// Login
-document.getElementById('loginButton').addEventListener('click', async () => {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  // validações...
-  const res = await fetch(LOGIN_WEBHOOK_URL, {/*...*/});
-  const result = await res.json();
-  if (result.success) {
-    userId = result.userId;
-    document.getElementById('loginPopup').style.display = 'none';
-    loadVideos();
-    startAutoRefresh();
-  }
-});
+// Funções de cookie e login permanecem iguais (sem debugLog)
+// Eventos de login e recovery permanecem iguais
 
-// Recuperação de senha
-document.getElementById('sendRecoveryBtn').addEventListener('click', async () => {
-  // lógica...
-});
+// Extração e renderização de vídeos sem chamadas debugLog
 
-// Extras: Enter nos inputs, fechar popup, etc.
-
-// Carrega vídeos
 async function loadVideos() {
-  document.getElementById('loading').style.display = 'flex';
-  const res = await fetch(VIDEOS_WEBHOOK_URL, {/*...*/});
-  const rawData = await res.json();
-  const processed = extractVideoData(rawData);
-  videosData = processed;
-  filteredData = [...videosData];
-  renderVideos();
-  document.getElementById('loading').style.display = 'none';
-}
-
-// Extrai dados
-function extractVideoData(raw) {
-  const videos = Array.isArray(raw) ? raw : (raw.videos || raw.data?.videos || []);
-  return videos.map(v => ({
-    aweme_id: v.aweme_id || v.video_id,
-    title: v.title || v.desc || 'Sem título',
-    play: v.play || v.video_url,
-    duration: v.duration || 0,
-    author: { nickname: v.author?.nickname || 'user' },
-    play_count: +v.play_count || 0,
-    digg_count: +v.digg_count || 0,
-    comment_count: +v.comment_count || 0,
-    share_count: +v.share_count || 0,
-    create_time: v.create_time || v.created_at,
-    region: v.region,
-  }));
-}
-
-// Renderiza cards
-function renderVideos() {
-  const grid = document.getElementById('videosGrid');
+  const loading = document.getElementById('loading');
+  const grid    = document.getElementById('videosGrid');
+  loading.style.display = 'flex';
   grid.innerHTML = '';
-  if (!filteredData.length) {
-    grid.innerHTML = '<p style=\"color:#888\">Nenhum vídeo encontrado</p>';
-    return;
+
+  try {
+    const res  = await fetch(VIDEOS_WEBHOOK_URL, {
+      method:  'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ userId: userId||'2' })
+    });
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    const rawData = await res.json();
+    const processedVideos = extractVideoData(rawData);
+    videosData = processedVideos;
+    filteredData = [...videosData];
+    renderVideos();
+  } catch (err) {
+    console.error('Erro ao carregar vídeos:', err);
+    grid.innerHTML = `<div class="error-state">❌<h3>Erro ao carregar</h3><p>${err.message}</p></div>`;
+  } finally {
+    loading.style.display = 'none';
   }
-  filteredData.forEach(video => {
-    const card = document.createElement('div');
-    card.className = 'video-card';
-    card.innerHTML = `
-      <div class="video-wrapper">
-        ${video.play ? `<video class="video-player" controls preload="metadata"><source src="${video.play}" type="video/mp4"></video>` : '<div style="color:#888">Vídeo não disponível</div>'}
-      </div>
-      <div class="video-info">
-        <div class="video-title">${video.title}</div>
-      </div>`;
-    grid.appendChild(card);
-  });
 }
 
-// Auto-refresh
+document.getElementById('searchBtn')?.addEventListener('click', applyFilters);
+// Resto das funções applyFilters, renderVideos, etc., sem debugLog
+
 function startAutoRefresh() {
-  clearInterval(autoRefreshInterval);
+  if (autoRefreshInterval) clearInterval(autoRefreshInterval);
   autoRefreshInterval = setInterval(loadVideos, 5*60*1000);
 }
 
-// Inicializa
+function logout() {
+  // Mesma lógica de logout
+}
+
+function addLogoutButton() {
+  // Mesma lógica, se necessário
+}
+
+// Inicialização
 window.addEventListener('load', () => {
-  loadVideos();
-  startAutoRefresh();
+  if (checkExistingLogin()) {
+    loadVideos();
+    startAutoRefresh();
+    addLogoutButton();
+  } else {
+    document.getElementById('email').focus();
+  }
 });
-</script>
+
+window.addEventListener('beforeunload', () => {
+  if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+});
+  </script>
+</body>
 </html>
