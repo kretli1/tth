@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>3TikTop Hooks - Em Alta</title>
+  <title>TikTop Hooks - Em Alta</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
 /* Reset e variáveis */
@@ -239,7 +239,7 @@ body {
   color:var(--tiktok-white); padding:10px 20px; border-radius:16px;
   font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px;
   box-shadow:0 4px 15px rgba(37,244,238,0.3); text-decoration:none;
-  transition:all .3s ease; width:80px; display:flex; justify-content:center; align-items:center;
+  transition:all .3s ease; width:80px; height:40px; display:flex; justify-content:center; align-items:center;
 }
 .back-btn:hover {
   transform: translateY(-2px);
@@ -909,7 +909,10 @@ function addLogoutButton() {
       transition:   'all .3s ease',
       boxShadow:    '0 4px 15px rgba(254,44,85,0.3)',
       width:        '80px',
-      textAlign:    'center'
+      height:       '40px',
+      display:      'flex',
+      justifyContent: 'center',
+      alignItems:   'center'
     });
     logoutBtn.addEventListener('click', logout);
     logoutBtn.addEventListener('mouseenter', () => {
