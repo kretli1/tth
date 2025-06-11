@@ -239,6 +239,22 @@ body {
   box-shadow:0 6px 20px rgba(37,244,238,0.4);
 }
 
+/* Botão Sair (Logout) */
+.logout-btn {
+  background: linear-gradient(135deg,var(--tiktok-red),var(--tiktok-accent) 50%,var(--tiktok-cyan));
+  background-size:200% 200%; border:none; color:var(--tiktok-white);
+  padding:10px 20px; border-radius:16px; font-size:12px; font-weight:700;
+  cursor:pointer; text-transform:uppercase; letter-spacing:1px;
+  text-decoration:none; transition:all .3s ease;
+  box-shadow:0 4px 15px rgba(254,44,85,0.3);
+  width:120px; height:40px; display:flex;
+  justify-content:center; align-items:center;
+}
+.logout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow:0 6px 20px rgba(254,44,85,0.4);
+}
+
 /* SEARCH AREA */
 .header-search {
   padding:24px 32px 28px; background:rgba(0,0,0,0.3);
