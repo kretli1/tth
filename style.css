@@ -226,11 +226,17 @@ body {
 }
 .header-actions { display:flex; align-items:center; gap:16px; }
 .trending-badge {
-  background: linear-gradient(135deg,var(--tiktok-red),var(--tiktok-cyan) 50%,var(--tiktok-red));
+  background: linear-gradient(135deg,var(--tiktok-cyan),var(--tiktok-blue) 50%,var(--tiktok-red));
   background-size:200% 200%; animation:gradient-shift 3s ease infinite;
-  color:var(--tiktok-white); padding:10px 20px; border-radius:25px;
+  color:var(--tiktok-white); padding:10px 20px; border-radius:16px;
   font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px;
-  box-shadow:0 4px 15px rgba(254,44,85,0.3);
+  box-shadow:0 4px 15px rgba(37,244,238,0.3); text-decoration:none;
+  transition:all .3s ease; width:80px; height:40px; display:flex; 
+  justify-content:center; align-items:center; cursor:pointer;
+}
+.trending-badge:hover {
+  transform: translateY(-2px);
+  box-shadow:0 6px 20px rgba(37,244,238,0.4);
 }
 
 /* SEARCH AREA */
