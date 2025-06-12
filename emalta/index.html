@@ -449,57 +449,6 @@ body {
   box-shadow: none;
 }
 
-/* Debug Panel */
-.debug-panel {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--tiktok-border);
-  border-radius: 12px;
-  margin-top: 16px;
-  padding: 16px;
-  backdrop-filter: blur(10px);
-}
-
-.debug-content h4 {
-  color: var(--tiktok-cyan);
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 12px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.debug-info {
-  background: var(--tiktok-darker);
-  border: 1px solid var(--tiktok-border);
-  border-radius: 8px;
-  padding: 12px;
-  font-family: 'Courier New', monospace;
-  font-size: 11px;
-  color: var(--tiktok-white);
-  max-height: 200px;
-  overflow-y: auto;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-
-.debug-toggle {
-  background: linear-gradient(135deg, var(--tiktok-gray), rgba(138, 139, 155, 0.8));
-  border: none;
-  color: var(--tiktok-white);
-  border-radius: 8px;
-  padding: 6px 12px;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 8px;
-  transition: all 0.3s ease;
-}
-
-.debug-toggle:hover {
-  background: linear-gradient(135deg, var(--tiktok-red), var(--tiktok-accent));
-  transform: translateY(-1px);
-}
-
 /* MAIN CONTENT */
 .main-content {
   margin-top:164px; 
@@ -757,24 +706,54 @@ body {
             <label class="filter-label">Região</label>
             <select id="region" class="filter-select">
               <option value="" selected>Todas as regiões</option>
-              <option value="de">Alemanha</option>
+              <option value="ar">Argentina</option>
+              <option value="au">Austrália</option>
               <option value="bd">Bangladesh</option>
+              <option value="be">Bélgica</option>
+              <option value="bo">Bolívia</option>
               <option value="br">Brasil</option>
+              <option value="ca">Canadá</option>
+              <option value="cl">Chile</option>
               <option value="cn">China</option>
+              <option value="co">Colômbia</option>
+              <option value="cr">Costa Rica</option>
+              <option value="dk">Dinamarca</option>
+              <option value="ec">Equador</option>
               <option value="eg">Egito</option>
               <option value="es">Espanha</option>
               <option value="us">Estados Unidos</option>
               <option value="ph">Filipinas</option>
+              <option value="fi">Finlândia</option>
               <option value="fr">França</option>
-              <option value="in">Índia</option>
+              <option value="de">Alemanha</option>
+              <option value="gh">Gana</option>
+              <option value="gt">Guatemala</option>
+              <option value="hn">Honduras</option>
               <option value="id">Indonésia</option>
+              <option value="in">Índia</option>
               <option value="it">Itália</option>
               <option value="jp">Japão</option>
+              <option value="ke">Quênia</option>
               <option value="kr">Coreia do Sul</option>
               <option value="mx">México</option>
+              <option value="my">Malásia</option>
               <option value="ng">Nigéria</option>
+              <option value="nl">Holanda</option>
+              <option value="pa">Panamá</option>
+              <option value="pe">Peru</option>
               <option value="pk">Paquistão</option>
+              <option value="pl">Polônia</option>
+              <option value="pt">Portugal</option>
+              <option value="py">Paraguai</option>
               <option value="uk">Reino Unido</option>
+              <option value="do">República Dominicana</option>
+              <option value="ro">Romênia</option>
+              <option value="se">Suécia</option>
+              <option value="sg">Singapura</option>
+              <option value="th">Tailândia</option>
+              <option value="tr">Turquia</option>
+              <option value="ve">Venezuela</option>
+              <option value="za">África do Sul</option>
             </select>
           </div>
           <div class="filter-group">
@@ -818,15 +797,6 @@ body {
             Restaurar Padrão
           </button>
         </div>
-        
-        <!-- Debug Panel (apenas em desenvolvimento) -->
-        <div class="debug-panel" id="debugPanel" style="display: none;">
-          <div class="debug-content">
-            <h4>🔍 Debug: Dados de Região</h4>
-            <div id="debugInfo">Aguardando dados...</div>
-            <button id="toggleDebugBtn" class="debug-toggle">Fechar Debug</button>
-          </div>
-        </div>
       </div>
     </div>
   </header>
@@ -855,7 +825,6 @@ let defaultFilters = {
   period: '',
   sortBy: 'play_count'
 };
-let regionDataFormats = new Set(); // Para detectar formatos de região
 
 // Cookies
 function setCookie(name, value, days) {
@@ -1043,43 +1012,6 @@ document.getElementById('clearAllBtn').addEventListener('click', () => {
   resetToDefaultFilters();
 });
 
-// Toggle debug panel
-const debugToggleBtn = document.createElement('button');
-debugToggleBtn.textContent = '🔍 Debug';
-debugToggleBtn.className = 'debug-toggle';
-debugToggleBtn.style.cssText = `
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 1001;
-  background: linear-gradient(135deg, var(--tiktok-red), var(--tiktok-cyan));
-  border: none;
-  color: var(--tiktok-white);
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-`;
-document.body.appendChild(debugToggleBtn);
-
-debugToggleBtn.addEventListener('click', () => {
-  const debugPanel = document.getElementById('debugPanel');
-  if (debugPanel.style.display === 'none') {
-    debugPanel.style.display = 'block';
-    debugToggleBtn.textContent = '❌ Fechar';
-  } else {
-    debugPanel.style.display = 'none';
-    debugToggleBtn.textContent = '🔍 Debug';
-  }
-});
-
-document.getElementById('toggleDebugBtn').addEventListener('click', () => {
-  document.getElementById('debugPanel').style.display = 'none';
-  debugToggleBtn.textContent = '🔍 Debug';
-});
-
 // Helpers de formatação
 function formatNumber(num) {
   if (num >= 1e6) return (num/1e6).toFixed(1) + 'M';
@@ -1182,13 +1114,20 @@ function detectAndNormalizeRegion(regionData) {
   
   // Mapear diferentes formatos para códigos de 2 letras
   const regionMap = {
-    // Códigos de 2 letras (já normalizados)
+    // Códigos já normalizados (baseados nos dados reais detectados)
     'br': 'br', 'us': 'us', 'uk': 'uk', 'gb': 'uk', 'de': 'de', 'fr': 'fr',
     'es': 'es', 'it': 'it', 'jp': 'jp', 'kr': 'kr', 'cn': 'cn', 'in': 'in',
     'mx': 'mx', 'id': 'id', 'ph': 'ph', 'bd': 'bd', 'eg': 'eg', 'ng': 'ng',
-    'pk': 'pk',
+    'pk': 'pk', 'ca': 'ca', 'au': 'au', 'pl': 'pl', 'nl': 'nl', 'se': 'se',
+    'dk': 'dk', 'be': 'be', 'tr': 'tr', 'my': 'my', 'th': 'th', 'sg': 'sg',
+    'za': 'za', 'ar': 'ar', 'cl': 'cl', 'co': 'co', 'pe': 'pe', 've': 've',
+    'ec': 'ec', 'py': 'py', 'bo': 'bo', 'cr': 'cr', 'gt': 'gt', 'hn': 'hn',
+    'do': 'do', 'pa': 'pa', 'ni': 'ni', 'ro': 'ro', 'ua': 'ua', 'md': 'md',
+    'ma': 'ma', 'gh': 'gh', 'ke': 'ke', 'tz': 'tz', 'et': 'et', 'sn': 'sn',
+    'fi': 'fi', 'pt': 'pt', 'lb': 'lb', 'mm': 'mm', 'bh': 'bh', 'kz': 'kz',
+    'mf': 'mf', 'xk': 'xk', 'iq': 'iq', 'np': 'np',
     
-    // Nomes completos para códigos
+    // Nomes completos para códigos (casos mais comuns)
     'brasil': 'br', 'brazil': 'br',
     'estados unidos': 'us', 'united states': 'us', 'usa': 'us',
     'reino unido': 'uk', 'united kingdom': 'uk', 'england': 'uk',
@@ -1197,87 +1136,12 @@ function detectAndNormalizeRegion(regionData) {
     'espanha': 'es', 'spain': 'es',
     'itália': 'it', 'italy': 'it',
     'japão': 'jp', 'japan': 'jp',
-    'coreia do sul': 'kr', 'south korea': 'kr', 'korea': 'kr',
-    'china': 'cn',
-    'índia': 'in', 'india': 'in',
     'méxico': 'mx', 'mexico': 'mx',
-    'indonésia': 'id', 'indonesia': 'id',
-    'filipinas': 'ph', 'philippines': 'ph',
-    'bangladesh': 'bd',
-    'egito': 'eg', 'egypt': 'eg',
-    'nigéria': 'ng', 'nigeria': 'ng',
-    'paquistão': 'pk', 'pakistan': 'pk'
+    'canadá': 'ca', 'canada': 'ca',
+    'austrália': 'au', 'australia': 'au'
   };
-  
-  // Adicionar ao conjunto de formatos detectados para debug
-  regionDataFormats.add(regionData);
   
   return regionMap[region] || null;
-}
-
-// Função para atualizar debug info
-function updateDebugInfo() {
-  const debugInfo = document.getElementById('debugInfo');
-  
-  // Analisar dados de região nos vídeos
-  const regionAnalysis = {
-    totalVideos: videosData.length,
-    videosComRegiao: 0,
-    videosSemRegiao: 0,
-    formatosDetectados: Array.from(regionDataFormats),
-    regioesNormalizadas: new Set(),
-    exemplosDados: []
-  };
-  
-  videosData.forEach((video, index) => {
-    if (video.region) {
-      regionAnalysis.videosComRegiao++;
-      const normalized = detectAndNormalizeRegion(video.region);
-      if (normalized) {
-        regionAnalysis.regioesNormalizadas.add(normalized);
-      }
-      
-      // Adicionar alguns exemplos
-      if (regionAnalysis.exemplosDados.length < 5) {
-        regionAnalysis.exemplosDados.push({
-          indice: index,
-          original: video.region,
-          normalizado: normalized,
-          titulo: video.title.substring(0, 30) + '...'
-        });
-      }
-    } else {
-      regionAnalysis.videosSemRegiao++;
-    }
-  });
-  
-  const debugText = `
-ANÁLISE DE DADOS DE REGIÃO:
-================================
-
-📊 ESTATÍSTICAS:
-- Total de vídeos: ${regionAnalysis.totalVideos}
-- Vídeos com região: ${regionAnalysis.videosComRegiao}
-- Vídeos sem região: ${regionAnalysis.videosSemRegiao}
-
-🗺️ FORMATOS DETECTADOS:
-${regionAnalysis.formatosDetectados.map(f => `- "${f}"`).join('\n')}
-
-✅ REGIÕES NORMALIZADAS:
-${Array.from(regionAnalysis.regioesNormalizadas).map(r => `- ${r}`).join('\n')}
-
-📝 EXEMPLOS DE DADOS:
-${regionAnalysis.exemplosDados.map(ex => 
-  `- [${ex.indice}] "${ex.original}" → "${ex.normalizado}" | ${ex.titulo}`
-).join('\n')}
-
-🔧 FILTRO ATUAL:
-- Região selecionada: "${document.getElementById('region').value}"
-- Filtros ativos: ${filtersActive ? 'SIM' : 'NÃO'}
-- Vídeos filtrados: ${filteredVideosData.length}
-`;
-  
-  debugInfo.textContent = debugText;
 }
 function searchInVideo(video, keyword) {
   if (!keyword) return true;
@@ -1398,7 +1262,6 @@ function applyFilters() {
   renderVideos();
   updateFiltersInfo();
   updateAutoRefresh();
-  updateDebugInfo(); // Atualizar debug após filtrar
 }
 
 // Restaurar filtros padrão
@@ -1553,7 +1416,6 @@ async function loadVideos() {
     if (processedVideos && processedVideos.length > 0) {
       videosData = processedVideos;
       applyFilters(); // Aplicar filtros padrão após carregar
-      updateDebugInfo(); // Atualizar debug após carregar os dados
     } else {
       grid.innerHTML = `
         <div class="error-state">
@@ -1561,7 +1423,6 @@ async function loadVideos() {
           <h3>Nenhum vídeo disponível</h3>
           <p>Nenhum vídeo foi encontrado no momento. Tente ajustar os filtros ou aguarde alguns minutos.</p>
         </div>`;
-      updateDebugInfo(); // Atualizar debug mesmo sem dados
     }
   } catch (err) {
     console.error('Erro ao carregar vídeos:', err);
