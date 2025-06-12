@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>2TikTop Hooks - Em Alta</title>
+  <title>TikTop Hooks - Em Alta</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <link rel="icon" type="image/png" sizes="32x32" href="https://icones.pro/wp-content/uploads/2021/03/logo-icone-tiktok.png">
   <style>
@@ -236,7 +236,7 @@ body {
 .header-actions { display:flex; align-items:center; gap:16px; }
 
 /* Botões do header */
-.back-btn, .trending-badge, .logout-btn {
+.back-btn, .logout-btn {
   height:40px; padding:0 20px; border-radius:16px;
   font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px;
   text-decoration:none; transition:all .3s ease;
@@ -255,17 +255,6 @@ body {
   box-shadow:0 6px 20px rgba(37,244,238,0.4);
 }
 
-.trending-badge {
-  background: linear-gradient(135deg,var(--tiktok-red),var(--tiktok-accent) 50%,var(--tiktok-cyan));
-  background-size:200% 200%; animation:gradient-shift 3s ease infinite;
-  color:var(--tiktok-white); width:120px;
-  box-shadow:0 4px 15px rgba(254,44,85,0.3);
-}
-.trending-badge:hover {
-  transform: translateY(-2px);
-  box-shadow:0 6px 20px rgba(254,44,85,0.4);
-}
-
 .logout-btn {
   background: linear-gradient(135deg,var(--tiktok-red),var(--tiktok-accent) 50%,var(--tiktok-cyan));
   background-size:200% 200%; color:var(--tiktok-white);
@@ -276,54 +265,69 @@ body {
   box-shadow:0 6px 20px rgba(254,44,85,0.4);
 }
 
-/* SEARCH AREA - Adicionando seção de filtros simples */
+/* SEARCH AREA */
 .header-search {
-  padding:20px 32px 24px; background:rgba(0,0,0,0.3);
+  padding:24px 32px 28px; background:rgba(0,0,0,0.3);
   border-top:1px solid var(--tiktok-border);
 }
 .search-container { max-width:1400px; margin:0 auto; }
-.search-info {
-  display:flex; justify-content:space-between; align-items:center;
-  flex-wrap:wrap; gap:16px;
+.search-form {
+  display:grid; grid-template-columns:2fr 1fr 1fr 1fr auto; gap:20px;
+  align-items:end;
 }
-.trending-info {
-  display:flex; align-items:center; gap:12px;
-}
-.trending-icon {
-  width:24px; height:24px; color:var(--tiktok-red);
-  animation:pulse 2s infinite;
-}
-@keyframes pulse {
-  0% { transform:scale(1); opacity:1; }
-  50% { transform:scale(1.1); opacity:0.7; }
-  100% { transform:scale(1); opacity:1; }
-}
-.trending-text {
-  font-size:16px; font-weight:600; color:var(--tiktok-white);
-}
-.trending-subtitle {
-  font-size:12px; color:var(--tiktok-gray); margin-top:2px;
-}
-.refresh-controls {
-  display:flex; align-items:center; gap:12px;
-}
-.auto-refresh-indicator {
-  font-size:12px; color:var(--tiktok-gray);
+.form-group { display:flex; flex-direction:column; gap:10px; }
+.form-label {
+  font-size:12px; font-weight:600; color:rgba(255,255,255,.9);
+  margin-left:4px; text-transform:uppercase; letter-spacing:1px;
   display:flex; align-items:center; gap:6px;
 }
-.refresh-dot {
-  width:8px; height:8px; background:var(--tiktok-cyan);
-  border-radius:50%; animation:pulse 2s infinite;
+.form-input, .select-input {
+  height:52px; background:var(--tiktok-dark); border:2px solid var(--tiktok-border);
+  border-radius:16px; padding:0 20px; color:var(--tiktok-white);
+  font-size:16px; font-weight:500; transition:all .3s cubic-bezier(.4,0,.2,1);
+  position:relative;
 }
-.manual-refresh-btn {
-  background:rgba(255,255,255,0.1); border:1px solid var(--tiktok-border);
-  color:var(--tiktok-white); padding:8px 16px; border-radius:12px;
-  font-size:12px; cursor:pointer; transition:all .3s ease;
+.form-input:focus, .select-input:focus {
+  outline:none; border-color:var(--tiktok-red);
+  box-shadow:0 0 0 4px rgba(254,44,85,0.15);
+  transform: translateY(-2px);
+  background: rgba(22,24,35,0.8);
 }
-.manual-refresh-btn:hover {
-  background:rgba(255,255,255,0.2); border-color:var(--tiktok-cyan);
-  transform: translateY(-1px);
+.form-input::placeholder { color:var(--tiktok-gray); font-weight:400; }
+.select-input {
+  cursor:pointer; appearance:none;
+  background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position:right 12px center; background-repeat:no-repeat; background-size:16px;
+  padding-right:40px;
 }
+.select-input option {
+  background:var(--tiktok-dark); color:var(--tiktok-white); padding:12px; font-weight:500;
+}
+.search-btn {
+  height:52px; padding:0 32px;
+  background: linear-gradient(135deg,var(--tiktok-red),var(--tiktok-accent) 50%,var(--tiktok-cyan));
+  background-size:200% 200%; border:none; border-radius:16px;
+  color:var(--tiktok-white); font-weight:700; font-size:16px;
+  cursor:pointer; transition:all .3s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 8px 25px rgba(254,44,85,0.3);
+  text-transform:uppercase; letter-spacing:1px;
+  position:relative; overflow:hidden;
+}
+.search-btn:hover {
+  transform: translateY(-3px); box-shadow:0 12px 35px rgba(254,44,85,0.4);
+  animation:gradient-shift 2s ease infinite;
+}
+.search-btn:active { transform: translateY(-1px); }
+.search-btn:disabled {
+  background:var(--tiktok-gray); cursor:not-allowed;
+  transform:none; box-shadow:none; animation:none; opacity:.6;
+}
+.search-btn::before {
+  content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
+  background: linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
+  transition:left .6s;
+}
+.search-btn:hover::before { left:100%; }
 
 /* MAIN CONTENT */
 .main-content {
