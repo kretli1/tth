@@ -247,136 +247,119 @@ body {
   box-shadow:0 6px 20px rgba(37,244,238,0.4);
 }
 
-/* NOVA ÁREA DE FILTROS */
-.header-filters {
-  padding:24px 32px 28px; 
-  background:rgba(0,0,0,0.3);
-  border-top:1px solid var(--tiktok-border);
+/* FILTERS BAR */
+.filters-bar {
+  position: fixed;
+  top: 72px;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, var(--tiktok-dark), var(--tiktok-darker));
+  border-bottom: 1px solid var(--tiktok-border);
+  z-index: 999;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
-.filters-container { 
-  max-width:1400px; 
-  margin:0 auto; 
+
+.filters-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+  flex-wrap: wrap;
 }
-.filters-form {
-  display:grid; 
-  grid-template-columns:2fr 1fr 1fr 1fr auto; 
-  gap:20px;
-  align-items:end;
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
-.filter-group { 
-  display:flex; 
-  flex-direction:column; 
-  gap:10px; 
-}
+
 .filter-label {
-  font-size:12px; 
-  font-weight:600; 
-  color:rgba(255,255,255,.9);
-  margin-left:4px; 
-  text-transform:uppercase; 
-  letter-spacing:1px;
-  display:flex; 
-  align-items:center; 
-  gap:6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--tiktok-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
+
 .filter-input, .filter-select {
-  height:52px; 
-  background:var(--tiktok-dark); 
-  border:2px solid var(--tiktok-border);
-  border-radius:16px; 
-  padding:0 20px; 
-  color:var(--tiktok-white);
-  font-size:16px; 
-  font-weight:500; 
-  transition:all .3s cubic-bezier(.4,0,.2,1);
-  position:relative;
+  padding: 10px 16px;
+  border: 2px solid var(--tiktok-border);
+  border-radius: 12px;
+  background: var(--tiktok-darker);
+  color: var(--tiktok-white);
+  font-size: 14px;
+  font-weight: 500;
+  min-width: 150px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .filter-input:focus, .filter-select:focus {
-  outline:none; 
-  border-color:var(--tiktok-red);
-  box-shadow:0 0 0 4px rgba(254,44,85,0.15);
-  transform: translateY(-2px);
-  background: rgba(22,24,35,0.8);
+  outline: none;
+  border-color: var(--tiktok-red);
+  box-shadow: 0 0 0 3px rgba(254, 44, 85, 0.15);
+  transform: translateY(-1px);
 }
-.filter-input::placeholder { 
-  color:var(--tiktok-gray); 
-  font-weight:400; 
+
+.filter-input::placeholder {
+  color: var(--tiktok-gray);
+  font-weight: 400;
 }
-.filter-select {
-  cursor:pointer; 
-  appearance:none;
-  background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
-  background-position:right 12px center; 
-  background-repeat:no-repeat; 
-  background-size:16px;
-  padding-right:40px;
-}
+
 .filter-select option {
-  background:var(--tiktok-dark); 
-  color:var(--tiktok-white); 
-  padding:12px; 
-  font-weight:500;
+  background: var(--tiktok-darker);
+  color: var(--tiktok-white);
+  padding: 8px;
 }
-.discover-btn {
-  height:52px; 
-  padding:0 32px;
-  background: linear-gradient(135deg,var(--tiktok-red),var(--tiktok-accent) 50%,var(--tiktok-cyan));
-  background-size:200% 200%; 
-  border:none; 
-  border-radius:16px;
-  color:var(--tiktok-white); 
-  font-weight:700; 
-  font-size:16px;
-  cursor:pointer; 
-  transition:all .3s cubic-bezier(.4,0,.2,1);
-  box-shadow:0 8px 25px rgba(254,44,85,0.3);
-  text-transform:uppercase; 
-  letter-spacing:1px;
-  position:relative; 
-  overflow:hidden;
+
+.clear-filters-btn {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, var(--tiktok-red), var(--tiktok-accent));
+  border: none;
+  color: var(--tiktok-white);
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(254, 44, 85, 0.3);
+  margin-left: auto;
 }
-.discover-btn:hover {
-  transform: translateY(-3px); 
-  box-shadow:0 12px 35px rgba(254,44,85,0.4);
-  animation:gradient-shift 2s ease infinite;
+
+.clear-filters-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(254, 44, 85, 0.4);
 }
-.discover-btn:active { 
-  transform: translateY(-1px); 
+
+.results-count {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--tiktok-gray);
+  font-weight: 500;
+  margin-left: auto;
 }
-.discover-btn:disabled {
-  background:var(--tiktok-gray); 
-  cursor:not-allowed;
-  transform:none; 
-  box-shadow:none; 
-  animation:none; 
-  opacity:.6;
-}
-.discover-btn::before {
-  content:''; 
-  position:absolute; 
-  top:0; 
-  left:-100%; 
-  width:100%; 
-  height:100%;
-  background: linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
-  transition:left .6s;
-}
-.discover-btn:hover::before { 
-  left:100%; 
+
+.results-count .count-number {
+  color: var(--tiktok-cyan);
+  font-weight: 700;
 }
 
 /* MAIN CONTENT */
 .main-content {
-  margin-top:164px; 
-  padding:40px 32px; 
-  min-height:calc(100vh - 164px);
+  margin-top: 144px; /* 72px header + 72px filters */
+  padding: 40px 32px;
+  min-height: calc(100vh - 144px);
 }
+
 .videos-grid {
-  display:grid; 
-  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
-  gap:24px; 
-  max-width:1400px; 
-  margin:0 auto;
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:24px; max-width:1400px; margin:0 auto;
 }
 
 /* VIDEO CARD */
@@ -493,37 +476,24 @@ body {
 }
 
 /* RESPONSIVE */
-@media (max-width:1200px) {
-  .filters-form { 
-    grid-template-columns:1fr 1fr 1fr; 
-    gap:16px; 
-  }
-  .discover-btn { 
-    grid-column:span 3; 
-    margin-top:8px; 
-  }
-}
-
 @media (max-width:768px) {
   .header-top { height:60px; padding:0 20px; }
   .logo-main { font-size:24px; }
   .logo-icon { width:28px; height:28px; font-size:16px; }
   .back-btn { display:none; }
-  .header-filters { padding:20px; }
-  .filters-form { 
-    grid-template-columns:1fr; 
-    gap:16px; 
+  
+  .filters-container {
+    padding: 12px 20px;
+    gap: 12px;
   }
-  .discover-btn { 
-    grid-column:span 1; 
-    height:56px; 
-    font-size:18px; 
+  
+  .filter-input, .filter-select {
+    min-width: 120px;
+    font-size: 13px;
+    padding: 8px 12px;
   }
-  .filter-input, .filter-select { 
-    height:48px; 
-    font-size:16px; 
-  }
-  .main-content { margin-top:144px; padding:24px 20px; }
+  
+  .main-content { margin-top: 132px; padding:24px 20px; }
   .videos-grid { grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px; }
   .popup-content, .recovery-content { width:350px; padding:32px 24px; }
   .popup-content h3, .recovery-content h3 { font-size:24px; }
@@ -531,19 +501,37 @@ body {
 
 @media (max-width:480px) {
   .header-top { padding:0 16px; }
-  .header-filters { padding:16px; }
   .logo-main { font-size:20px; }
-  .filter-input, .filter-select { 
-    height:44px; 
-    padding:0 16px; 
-    font-size:15px; 
+  
+  .filters-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    padding: 16px;
   }
-  .discover-btn { 
-    height:50px; 
-    font-size:16px; 
-    padding:0 24px; 
+  
+  .filters-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
   }
-  .main-content { margin-top:134px; padding:20px 16px; }
+  
+  .filter-group {
+    flex: 1;
+    min-width: 140px;
+  }
+  
+  .filter-input, .filter-select {
+    min-width: unset;
+    width: 100%;
+  }
+  
+  .clear-filters-btn {
+    margin-left: 0;
+    align-self: stretch;
+  }
+  
+  .main-content { margin-top: 140px; padding:20px 16px; }
   .videos-grid { grid-template-columns:1fr; gap:16px; }
   .video-info { padding:16px; }
   .stats-left { gap:12px; }
@@ -604,57 +592,74 @@ body {
         <a href="https://app.tiktophooks.com/" class="back-btn">Voltar</a>
       </div>
     </div>
-    
-    <!-- Nova área de filtros seguindo o padrão do template -->
-    <div class="header-filters">
-      <div class="filters-container">
-        <div class="filters-form">
-          <div class="filter-group">
-            <label class="filter-label">Palavra-chave (opcional)</label>
-            <input type="text" id="keyword" class="filter-input" placeholder="O que você quer descobrir?">
-          </div>
-          <div class="filter-group">
-            <label class="filter-label">Região</label>
-            <select id="region" class="filter-select">
-              <option value="de">Alemanha</option>
-              <option value="bd">Bangladesh</option>
-              <option value="br" selected>Brasil</option>
-              <option value="cn">China</option>
-              <option value="eg">Egito</option>
-              <option value="es">Espanha</option>
-              <option value="us">Estados Unidos</option>
-              <option value="ph">Filipinas</option>
-              <option value="fr">França</option>
-              <option value="in">Índia</option>
-              <option value="id">Indonésia</option>
-              <option value="it">Itália</option>
-              <option value="jp">Japão</option>
-              <option value="mx">México</option>
-              <option value="ng">Nigéria</option>
-              <option value="pk">Paquistão</option>
-            </select>
-          </div>
-          <div class="filter-group">
-            <label class="filter-label">Período</label>
-            <select id="period" class="filter-select">
-              <option value="7" selected>7 dias</option>
-              <option value="30">30 dias</option>
-              <option value="90">90 dias</option>
-            </select>
-          </div>
-          <div class="filter-group">
-            <label class="filter-label">Ordenar</label>
-            <select id="sortBy" class="filter-select">
-              <option value="0" selected>Relevância</option>
-              <option value="1">Curtidas</option>
-              <option value="3">Recentes</option>
-            </select>
-          </div>
-          <button type="button" id="searchBtn" class="discover-btn">Filtrar</button>
+  </header>
+
+  <!-- Barra de Filtros -->
+  <div class="filters-bar">
+    <div class="filters-container">
+      <div class="filters-row" style="display: flex; gap: 20px; flex-wrap: wrap; align-items: end;">
+        <div class="filter-group">
+          <label class="filter-label">Palavra-chave</label>
+          <input 
+            type="text" 
+            id="keywordFilter" 
+            class="filter-input" 
+            placeholder="Buscar por título..."
+          />
         </div>
+        
+        <div class="filter-group">
+          <label class="filter-label">Região</label>
+          <select id="regionFilter" class="filter-select">
+            <option value="">Todas as regiões</option>
+            <option value="BR">Brasil</option>
+            <option value="US">Estados Unidos</option>
+            <option value="UK">Reino Unido</option>
+            <option value="FR">França</option>
+            <option value="DE">Alemanha</option>
+            <option value="ES">Espanha</option>
+            <option value="IT">Itália</option>
+            <option value="JP">Japão</option>
+            <option value="KR">Coreia do Sul</option>
+            <option value="MX">México</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label class="filter-label">Período</label>
+          <select id="periodFilter" class="filter-select">
+            <option value="">Todos os períodos</option>
+            <option value="today">Hoje</option>
+            <option value="week">Esta semana</option>
+            <option value="month">Este mês</option>
+            <option value="3months">Últimos 3 meses</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label class="filter-label">Ordenar por</label>
+          <select id="sortFilter" class="filter-select">
+            <option value="play_count">Mais visualizações</option>
+            <option value="digg_count">Mais curtidas</option>
+            <option value="comment_count">Mais comentários</option>
+            <option value="share_count">Mais compartilhamentos</option>
+            <option value="create_time">Mais recentes</option>
+            <option value="title">Ordem alfabética</option>
+          </select>
+        </div>
+        
+        <button class="clear-filters-btn" id="clearFiltersBtn">
+          Limpar Filtros
+        </button>
+      </div>
+      
+      <div class="results-count" id="resultsCount">
+        <span>Mostrando</span>
+        <span class="count-number" id="countNumber">0</span>
+        <span>vídeos</span>
       </div>
     </div>
-  </header>
+  </div>
 
   <main class="main-content">
     <div class="videos-grid" id="videosGrid"></div>
@@ -670,6 +675,7 @@ const VIDEOS_WEBHOOK_URL  = 'https://n8n-2025n8n.wjemh8.easypanel.host/webhook/4
 const RECOVERY_WEBHOOK_URL= 'https://n8n-2025n8n.wjemh8.easypanel.host/webhook/password-recovery';
 
 let videosData = [];
+let filteredVideosData = [];
 let userId = null;
 let autoRefreshInterval = null;
 
@@ -841,11 +847,6 @@ document.getElementById('recoveryPopup').addEventListener('click', e => {
   });
 });
 
-// Evento do botão de filtrar/buscar
-document.getElementById('searchBtn').addEventListener('click', () => {
-  loadVideos();
-});
-
 // Helpers de formatação
 function formatNumber(num) {
   if (num >= 1e6) return (num/1e6).toFixed(1) + 'M';
@@ -1001,6 +1002,108 @@ function createVideoCard(video, index) {
   return card;
 }
 
+// Função de filtro por período
+function filterByPeriod(videos, period) {
+  if (!period) return videos;
+  
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  
+  return videos.filter(video => {
+    if (!video.create_time) return true; // Se não tem data, mantém no resultado
+    
+    const videoDate = new Date(video.create_time * 1000); // Assumindo timestamp unix
+    
+    switch (period) {
+      case 'today':
+        return videoDate >= today;
+      case 'week':
+        const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+        return videoDate >= weekAgo;
+      case 'month':
+        const monthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+        return videoDate >= monthAgo;
+      case '3months':
+        const threeMonthsAgo = new Date(today.getTime() - 90 * 24 * 60 * 60 * 1000);
+        return videoDate >= threeMonthsAgo;
+      default:
+        return true;
+    }
+  });
+}
+
+// Função para aplicar filtros
+function applyFilters() {
+  const keyword = document.getElementById('keywordFilter').value.toLowerCase().trim();
+  const region = document.getElementById('regionFilter').value;
+  const period = document.getElementById('periodFilter').value;
+  const sortBy = document.getElementById('sortFilter').value;
+
+  let filtered = [...videosData];
+
+  // Filtro por palavra-chave
+  if (keyword) {
+    filtered = filtered.filter(video => 
+      video.title.toLowerCase().includes(keyword) ||
+      video.author.nickname.toLowerCase().includes(keyword)
+    );
+  }
+
+  // Filtro por região
+  if (region) {
+    filtered = filtered.filter(video => video.region === region);
+  }
+
+  // Filtro por período
+  filtered = filterByPeriod(filtered, period);
+
+  // Ordenação
+  filtered.sort((a, b) => {
+    switch (sortBy) {
+      case 'play_count':
+        return (b.play_count || 0) - (a.play_count || 0);
+      case 'digg_count':
+        return (b.digg_count || 0) - (a.digg_count || 0);
+      case 'comment_count':
+        return (b.comment_count || 0) - (a.comment_count || 0);
+      case 'share_count':
+        return (b.share_count || 0) - (a.share_count || 0);
+      case 'create_time':
+        return (b.create_time || 0) - (a.create_time || 0);
+      case 'title':
+        return (a.title || '').localeCompare(b.title || '');
+      default:
+        return 0;
+    }
+  });
+
+  filteredVideosData = filtered;
+  renderVideos();
+  updateResultsCount();
+}
+
+// Atualizar contador de resultados
+function updateResultsCount() {
+  const countElement = document.getElementById('countNumber');
+  countElement.textContent = filteredVideosData.length;
+}
+
+// Limpar filtros
+function clearFilters() {
+  document.getElementById('keywordFilter').value = '';
+  document.getElementById('regionFilter').value = '';
+  document.getElementById('periodFilter').value = '';
+  document.getElementById('sortFilter').value = 'play_count';
+  applyFilters();
+}
+
+// Event listeners para os filtros
+document.getElementById('keywordFilter').addEventListener('input', applyFilters);
+document.getElementById('regionFilter').addEventListener('change', applyFilters);
+document.getElementById('periodFilter').addEventListener('change', applyFilters);
+document.getElementById('sortFilter').addEventListener('change', applyFilters);
+document.getElementById('clearFiltersBtn').addEventListener('click', clearFilters);
+
 // Carrega vídeos
 async function loadVideos() {
   const loading = document.getElementById('loading');
@@ -1010,19 +1113,7 @@ async function loadVideos() {
   grid.innerHTML = '';
 
   try {
-    // Pegar valores dos filtros
-    const keyword = document.getElementById('keyword').value;
-    const region = document.getElementById('region').value;
-    const period = document.getElementById('period').value;
-    const sortBy = document.getElementById('sortBy').value;
-    
-    const requestBody = { 
-      userId: userId || '2',
-      keyword: keyword || '',
-      region: region,
-      period: period,
-      sortBy: sortBy
-    };
+    const requestBody = { userId: userId || '2' };
     
     const res  = await fetch(VIDEOS_WEBHOOK_URL, {
       method:  'POST',
@@ -1041,13 +1132,13 @@ async function loadVideos() {
     
     if (processedVideos && processedVideos.length > 0) {
       videosData = processedVideos;
-      renderVideos();
+      applyFilters(); // Aplicar filtros iniciais
     } else {
       grid.innerHTML = `
         <div class="error-state">
           <span class="emoji">⏰</span>
           <h3>Nenhum vídeo disponível</h3>
-          <p>Nenhum vídeo foi encontrado no momento. Tente ajustar os filtros ou aguarde alguns minutos.</p>
+          <p>Nenhum vídeo foi encontrado no momento. Tente novamente em alguns minutos.</p>
         </div>`;
     }
   } catch (err) {
@@ -1068,17 +1159,17 @@ function renderVideos() {
   const grid = document.getElementById('videosGrid');
   grid.innerHTML = '';
   
-  if (videosData.length === 0) {
+  if (filteredVideosData.length === 0) {
     grid.innerHTML = `
       <div class="empty-state">
         <span class="emoji">🔍</span>
         <h3>Nenhum vídeo encontrado</h3>
-        <p>Nenhum conteúdo disponível no momento</p>
+        <p>Nenhum vídeo corresponde aos filtros aplicados</p>
       </div>`;
     return;
   }
 
-  videosData.forEach((video, index) => {
+  filteredVideosData.forEach((video, index) => {
     try {
       const cardElement = createVideoCard(video, index);
       grid.appendChild(cardElement);
