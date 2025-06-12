@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+<div class="filters-form">
+          <div class="filter-group">
+            <label class<!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
@@ -249,7 +251,7 @@ body {
 
 /* NOVA ÁREA DE FILTROS */
 .header-filters {
-  padding:24px 32px 28px; 
+  padding:24px 32px; 
   background:rgba(0,0,0,0.3);
   border-top:1px solid var(--tiktok-border);
 }
@@ -259,7 +261,7 @@ body {
 }
 .filters-form {
   display:grid; 
-  grid-template-columns:2fr 1fr 1fr 1fr auto; 
+  grid-template-columns:2fr 1fr 1fr 1fr auto auto; 
   gap:20px;
   align-items:end;
 }
@@ -365,95 +367,67 @@ body {
   left:100%; 
 }
 
+.restore-btn {
+  height:52px; 
+  padding:0 32px;
+  background: linear-gradient(135deg,var(--tiktok-gray),rgba(138, 139, 155, 0.8));
+  background-size:200% 200%; 
+  border:none; 
+  border-radius:16px;
+  color:var(--tiktok-white); 
+  font-weight:700; 
+  font-size:16px;
+  cursor:pointer; 
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 8px 25px rgba(138, 139, 155, 0.2);
+  text-transform:uppercase; 
+  letter-spacing:1px;
+  position:relative; 
+  overflow:hidden;
+}
+
+.restore-btn:hover {
+  transform: translateY(-3px); 
+  box-shadow:0 12px 35px rgba(254,44,85,0.4);
+  background: linear-gradient(135deg,var(--tiktok-red),var(--tiktok-accent));
+  animation:gradient-shift 2s ease infinite;
+}
+
+.restore-btn:active { 
+  transform: translateY(-1px); 
+}
+
+.restore-btn:disabled {
+  background:var(--tiktok-gray); 
+  cursor:not-allowed;
+  transform:none; 
+  box-shadow:none; 
+  animation:none; 
+  opacity:.3;
+}
+
+.restore-btn::before {
+  content:''; 
+  position:absolute; 
+  top:0; 
+  left:-100%; 
+  width:100%; 
+  height:100%;
+  background: linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
+  transition:left .6s;
+}
+
+.restore-btn:hover::before { 
+  left:100%; 
+}
+
 /* Área de Informações dos Filtros */
-.filters-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid var(--tiktok-border);
-}
-
-.results-counter {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 14px;
-  color: var(--tiktok-gray);
-  font-weight: 500;
-}
-
-.counter-badge {
-  background: linear-gradient(135deg, var(--tiktok-red), var(--tiktok-cyan));
-  color: var(--tiktok-white);
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.filter-status {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  color: var(--tiktok-gray);
-}
-
-.status-indicator {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--tiktok-cyan);
-  animation: pulse 2s infinite;
-}
-
-.status-indicator.filtering {
-  background: var(--tiktok-red);
-}
-
-@keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0.5; }
-  100% { opacity: 1; }
-}
-
-.clear-all-btn {
-  padding: 8px 16px;
-  background: linear-gradient(135deg, var(--tiktok-gray), rgba(138, 139, 155, 0.8));
-  border: none;
-  color: var(--tiktok-white);
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(138, 139, 155, 0.2);
-}
-
-.clear-all-btn:hover {
-  background: linear-gradient(135deg, var(--tiktok-red), var(--tiktok-accent));
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(254, 44, 85, 0.4);
-}
-
-.clear-all-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
 
 /* MAIN CONTENT */
 .main-content {
-  margin-top:164px; 
+  margin-top:120px; 
   padding:40px 32px; 
-  min-height:calc(100vh - 164px);
+  min-height:calc(100vh - 120px);
 }
 .videos-grid {
   display:grid; 
@@ -579,12 +553,8 @@ body {
 /* RESPONSIVE */
 @media (max-width:1200px) {
   .filters-form { 
-    grid-template-columns:1fr 1fr 1fr; 
+    grid-template-columns:1fr 1fr 1fr 1fr auto auto; 
     gap:16px; 
-  }
-  .discover-btn { 
-    grid-column:span 3; 
-    margin-top:8px; 
   }
 }
 
@@ -595,11 +565,10 @@ body {
   .back-btn { display:none; }
   .header-filters { padding:20px; }
   .filters-form { 
-    grid-template-columns:1fr; 
+    grid-template-columns:1fr 1fr auto auto; 
     gap:16px; 
   }
-  .discover-btn { 
-    grid-column:span 1; 
+  .discover-btn, .restore-btn { 
     height:56px; 
     font-size:18px; 
   }
@@ -607,12 +576,7 @@ body {
     height:48px; 
     font-size:16px; 
   }
-  .filters-info {
-    flex-direction: column;
-    gap: 12px;
-    align-items: stretch;
-  }
-  .main-content { margin-top:144px; padding:24px 20px; }
+  .main-content { margin-top:100px; padding:24px 20px; }
   .videos-grid { grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px; }
   .popup-content, .recovery-content { width:350px; padding:32px 24px; }
   .popup-content h3, .recovery-content h3 { font-size:24px; }
@@ -627,12 +591,12 @@ body {
     padding:0 16px; 
     font-size:15px; 
   }
-  .discover-btn { 
+  .discover-btn, .restore-btn { 
     height:50px; 
     font-size:16px; 
     padding:0 24px; 
   }
-  .main-content { margin-top:134px; padding:20px 16px; }
+  .main-content { margin-top:90px; padding:20px 16px; }
   .videos-grid { grid-template-columns:1fr; gap:16px; }
   .video-info { padding:16px; }
   .stats-left { gap:12px; }
@@ -777,25 +741,8 @@ body {
               <option value="title">Ordem alfabética</option>
             </select>
           </div>
-          <button type="button" id="searchBtn" class="discover-btn">Filtrar</button>
-        </div>
-        
-        <!-- Área de Informações dos Filtros -->
-        <div class="filters-info">
-          <div class="results-counter" id="resultsCounterContainer" style="display: none;">
-            <span>Mostrando</span>
-            <span class="counter-badge" id="resultsCount">0</span>
-            <span>vídeos encontrados</span>
-          </div>
-          
-          <div class="filter-status">
-            <div class="status-indicator" id="statusIndicator"></div>
-            <span id="filterStatusText">Filtros padrão - Auto-refresh inativo</span>
-          </div>
-          
-          <button class="clear-all-btn" id="clearAllBtn">
-            Restaurar Padrão
-          </button>
+          <button type="button" id="searchBtn" class="discover-btn">FILTRAR</button>
+          <button type="button" id="clearAllBtn" class="restore-btn" style="display: none;">RESTAURAR</button>
         </div>
       </div>
     </div>
@@ -1260,7 +1207,7 @@ function applyFilters() {
 
   filteredVideosData = filtered;
   renderVideos();
-  updateFiltersInfo();
+  updateRestoreButtonVisibility();
   updateAutoRefresh();
 }
 
@@ -1275,31 +1222,15 @@ function resetToDefaultFilters() {
   applyFilters();
 }
 
-// Atualizar informações dos filtros
-function updateFiltersInfo() {
-  const resultsCountContainer = document.getElementById('resultsCounterContainer');
-  const resultsCount = document.getElementById('resultsCount');
-  const statusText = document.getElementById('filterStatusText');
-  const statusIndicator = document.getElementById('statusIndicator');
-  const clearBtn = document.getElementById('clearAllBtn');
+// Atualizar visibilidade do botão restaurar
+function updateRestoreButtonVisibility() {
+  const restoreBtn = document.getElementById('clearAllBtn');
   
-  // Mostrar contador apenas se há dados carregados
-  if (videosData.length > 0) {
-    resultsCountContainer.style.display = 'flex';
-    resultsCount.textContent = filteredVideosData.length;
-  } else {
-    resultsCountContainer.style.display = 'none';
-  }
-  
-  // Atualizar status
   if (filtersActive) {
-    statusText.textContent = 'Filtros personalizados - Auto-refresh pausado';
-    statusIndicator.classList.add('filtering');
-    clearBtn.textContent = 'Restaurar Padrão';
+    restoreBtn.style.display = 'block';
+    restoreBtn.disabled = false;
   } else {
-    statusText.textContent = 'Filtros padrão - Auto-refresh inativo';
-    statusIndicator.classList.remove('filtering');
-    clearBtn.textContent = 'Restaurar Padrão';
+    restoreBtn.style.display = 'none';
   }
 }
 
