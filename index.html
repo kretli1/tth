@@ -1,71 +1,47 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TikTop Hooks - Descobrir Vídeos Virais</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css"/>
-  <link rel="icon" type="image/png" sizes="32x32" href="https://icones.pro/wp-content/uploads/2021/03/logo-icone-tiktok.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TikTop Hooks - Descubra vídeos virais do TikTok</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
 </head>
 <body>
-  <!-- Pop-up de Login -->
-  <div class="popup" id="loginPopup">
-    <div class="popup-content">
-      <h3>TikTop Hooks</h3>
-      <p class="popup-subtitle">O radar dos vídeos que todo mundo quer ver!</p>
-      <input type="email" id="email" placeholder="Seu melhor e-mail" required />
-      <input type="password" id="password" placeholder="Sua senha secreta" required />
-      <button id="loginButton">Entrar Agora</button>
-      <div class="forgot-password-link">
-        <span id="forgotPasswordBtn">Esqueci minha senha</span>
-      </div>
-      <div class="divider">
-        <span>Não tem conta?</span>
-      </div>
-      <a href="https://lastlink.com/p/C77832B06/checkout-payment/" target="_blank" id="registerButton" class="register-button">
-        Cadastre-se Grátis
-      </a>
-      <div id="loginError"></div>
+  <!-- Loading da verificação de login -->
+  <div class="auth-check" id="authCheck">
+    <div class="auth-spinner">
+      <div class="spinner"></div>
+      <p>Verificando autenticação...</p>
     </div>
   </div>
 
-  <!-- Pop-up de Recuperação de Senha (começa oculto) -->
-  <div class="recovery-popup" id="recoveryPopup" style="display: none;">
-    <div class="recovery-content">
-      <button class="close-btn" id="closeRecoveryBtn">×</button>
-      <h3>Recuperar Senha</h3>
-      <p class="recovery-subtitle">Digite seu e-mail e enviaremos um link para redefinir sua senha em poucos segundos</p>
-      <input type="email" id="recoveryEmail" placeholder="Seu e-mail cadastrado" required />
-      <button id="sendRecoveryBtn">Enviar Link de Recuperação</button>
-      <div class="back-to-login-link">
-        <span id="backToLoginBtn">Voltar ao Login</span>
-      </div>
-      <div id="recoveryMessage"></div>
-      <div id="recoveryError"></div>
-    </div>
-  </div>
+
 
   <header class="header">
-    <div class="header-top">
-      <div class="logo">
-        <div class="logo-icon">
-          <img src="https://icones.pro/wp-content/uploads/2021/03/logo-icone-tiktok.png" alt="TikTok">
+          <div class="header-top">
+        <div class="logo">
+          <div class="logo-icon">
+            <img src="https://icones.pro/wp-content/uploads/2021/03/logo-icone-tiktok.png" alt="TikTok">
+          </div>
+          <div class="logo-text">
+            <div class="logo-main">TikTop Hooks</div>
+          </div>
         </div>
-        <div class="logo-text">
-          <div class="logo-main">TikTop Hooks</div>
+        <div class="header-actions">
+          <button id="logoutBtn" class="logout-btn">Sair</button>
         </div>
       </div>
-      <div class="header-actions">
-        <a href="https://app.tiktophooks.com/emalta/" class="trending-badge">Em Alta</a>
-      </div>
-    </div>
     <div class="header-search">
       <div class="search-container">
         <form class="search-form">
           <div class="form-group">
             <label class="form-label">Palavra-chave</label>
-            <input type="text" id="keyword" class="form-input" placeholder="O que você quer descobrir?">
+            <div class="search-input-container">
+              <input type="text" id="keyword" class="form-input" placeholder="O que você quer descobrir?">
+              <div class="search-suggestions" id="searchSuggestions"></div>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-label">Região</label>
@@ -104,11 +80,16 @@
               <option value="3">Recentes</option>
             </select>
           </div>
-          <button type="button" id="searchBtn" class="search-btn">Descobrir</button>
+          <div class="search-actions">
+            <button type="button" id="searchBtn" class="search-btn">Descobrir</button>
+          </div>
         </form>
       </div>
     </div>
   </header>
+
+  <!-- Barra decorativa -->
+  <div class="decorative-bar"></div>
 
   <main class="main-content">
     <div class="videos-grid" id="videosGrid"></div>
@@ -121,6 +102,30 @@
     </div>
   </main>
 
-  <script src="script.js"></script>
+  <!-- Botão Voltar ao Topo -->
+  <button id="backToTop" class="back-to-top" title="Voltar ao topo">
+    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M7 14l5-5 5 5z"/>
+    </svg>
+  </button>
+
+  <!-- Rodapé -->
+  <footer class="footer">
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <div class="footer-copyright">
+          <p>&copy; 2024 TikTop Hooks. Todos os direitos reservados.</p>
+        </div>
+        <div class="footer-legal">
+          <a href="#" class="footer-legal-link">Termos de uso</a>
+          <a href="#" class="footer-legal-link">Privacidade</a>
+          <a href="#" class="footer-legal-link">Cookies</a>
+          <a href="https://www.suporte.com" class="footer-legal-link" target="_blank">Suporte</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
 </body>
 </html>

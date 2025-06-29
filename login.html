@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - TikTop Hooks</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+</head>
+<body class="login-page">
+  <!-- Container principal de login -->
+  <div class="login-container">
+    <!-- Side esquerdo - Branding -->
+    <div class="login-brand">
+      <div class="brand-content">
+        <div class="brand-logo">
+          <div class="brand-logo-icon">
+            <img src="https://icones.pro/wp-content/uploads/2021/03/logo-icone-tiktok.png" alt="TikTok">
+          </div>
+          <div class="brand-logo-text">
+            <div class="brand-logo-main">TikTop Hooks</div>
+            <div class="brand-logo-sub">O radar dos vídeos virais</div>
+          </div>
+        </div>
+        
+        <div class="brand-features">
+          <div class="feature-item">
+            <div class="feature-icon">🎯</div>
+            <h3>Descubra Tendências</h3>
+            <p>Encontre os vídeos que estão bombando antes de todo mundo</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📊</div>
+            <h3>Análise Completa</h3>
+            <p>Estatísticas detalhadas de views, likes e compartilhamentos</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">⚡</div>
+            <h3>Sempre Atualizado</h3>
+            <p>Conteúdo em tempo real direto do TikTok</p>
+          </div>
+        </div>
+        
+        <div class="brand-stats">
+          <div class="stat">
+            <div class="stat-number">1M+</div>
+            <div class="stat-label">Vídeos analisados</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">50K+</div>
+            <div class="stat-label">Usuários ativos</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Viral</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Side direito - Formulário de login -->
+    <div class="login-form-container">
+      <div class="login-form-content">
+        <div class="login-header">
+          <h1>Bem-vindo de volta!</h1>
+          <p>Entre na sua conta para descobrir os vídeos mais virais do TikTok</p>
+        </div>
+
+        <form class="login-form" id="loginForm">
+          <div class="form-group">
+            <label for="email" class="form-label">E-mail</label>
+            <input type="email" id="email" class="form-input" placeholder="Seu melhor e-mail" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="password" class="form-label">Senha</label>
+            <input type="password" id="password" class="form-input" placeholder="Sua senha secreta" required>
+          </div>
+          
+          <button type="submit" id="loginButton" class="login-btn">
+            <span class="btn-text">Entrar Agora</span>
+            <span class="btn-loading" style="display: none;">
+              <div class="spinner-small"></div>
+              Entrando...
+            </span>
+          </button>
+          
+          <div class="form-links">
+            <a href="recovery.html" class="forgot-link">Esqueci minha senha</a>
+          </div>
+          
+          <div class="divider">
+            <span>Não tem conta?</span>
+          </div>
+          
+          <a href="https://lastlink.com/p/C77832B06/checkout-payment/" target="_blank" class="register-btn">
+            Cadastre-se Grátis
+          </a>
+          
+          <div id="loginError" class="error-message"></div>
+        </form>
+      </div>
+      
+      <!-- Footer na página de login -->
+      <div class="page-footer">
+        <p>&copy; 2024 TikTop Hooks. Todos os direitos reservados.</p>
+        <div class="footer-links">
+          <a href="#">Termos de uso</a>
+          <a href="#">Privacidade</a>
+          <a href="https://www.suporte.com" target="_blank">Suporte</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logos flutuantes de fundo -->
+  <div class="background-logos" id="backgroundLogos"></div>
+
+  <script src="login.js"></script>
+</body>
+</html> 
