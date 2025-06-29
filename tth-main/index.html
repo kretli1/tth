@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TikTop Hooks - Descubra vídeos virais do TikTok</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+</head>
+<body>
+  <!-- Loading da verificação de login -->
+  <div class="auth-check" id="authCheck">
+    <div class="auth-spinner">
+      <div class="spinner"></div>
+      <p>Verificando autenticação...</p>
+    </div>
+  </div>
+
+
+
+  <header class="header">
+          <div class="header-top">
+        <div class="logo">
+          <div class="logo-icon">
+            <img src="https://icones.pro/wp-content/uploads/2021/03/logo-icone-tiktok.png" alt="TikTok">
+          </div>
+          <div class="logo-text">
+            <div class="logo-main">TikTop Hooks</div>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button id="logoutBtn" class="logout-btn">Sair</button>
+        </div>
+      </div>
+    <div class="header-search">
+      <div class="search-container">
+        <form class="search-form">
+          <div class="form-group">
+            <label class="form-label">Palavra-chave</label>
+            <div class="search-input-container">
+              <input type="text" id="keyword" class="form-input" placeholder="O que você quer descobrir?">
+              <div class="search-suggestions" id="searchSuggestions"></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Região</label>
+            <select id="region" class="select-input">
+              <option value="de">Alemanha</option>
+              <option value="bd">Bangladesh</option>
+              <option value="br">Brasil</option>
+              <option value="cn">China</option>
+              <option value="eg">Egito</option>
+              <option value="es">Espanha</option>
+              <option value="us">Estados Unidos</option>
+              <option value="ph">Filipinas</option>
+              <option value="fr">França</option>
+              <option value="in">Índia</option>
+              <option value="id">Indonésia</option>
+              <option value="it">Itália</option>
+              <option value="jp">Japão</option>
+              <option value="mx">México</option>
+              <option value="ng">Nigéria</option>
+              <option value="pk">Paquistão</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Período</label>
+            <select id="period" class="select-input">
+              <option value="7">7 dias</option>
+              <option value="30">30 dias</option>
+              <option value="90">90 dias</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ordenar</label>
+            <select id="sortBy" class="select-input">
+              <option value="0">Relevância</option>
+              <option value="1">Curtidas</option>
+              <option value="3">Recentes</option>
+            </select>
+          </div>
+          <div class="search-actions">
+            <button type="button" id="searchBtn" class="search-btn">Descobrir</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </header>
+
+  <!-- Barra decorativa -->
+  <div class="decorative-bar"></div>
+
+  <main class="main-content">
+    <div class="videos-grid" id="videosGrid"></div>
+    <div class="loading" id="loading" style="display: none;">
+      <div class="spinner"></div>
+      <div class="loading-text">Buscando vídeos incríveis...</div>
+    </div>
+    <div class="tiktok-logos-container" id="tikTokLogos">
+      <!-- Aqui vão suas logos animadas -->
+    </div>
+  </main>
+
+  <!-- Botão Voltar ao Topo -->
+  <button id="backToTop" class="back-to-top" title="Voltar ao topo">
+    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M7 14l5-5 5 5z"/>
+    </svg>
+  </button>
+
+  <!-- Rodapé -->
+  <footer class="footer">
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <div class="footer-copyright">
+          <p>&copy; 2024 TikTop Hooks. Todos os direitos reservados.</p>
+        </div>
+        <div class="footer-legal">
+          <a href="#" class="footer-legal-link">Termos de uso</a>
+          <a href="#" class="footer-legal-link">Privacidade</a>
+          <a href="#" class="footer-legal-link">Cookies</a>
+          <a href="https://www.suporte.com" class="footer-legal-link" target="_blank">Suporte</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
